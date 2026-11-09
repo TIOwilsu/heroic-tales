@@ -4,7 +4,7 @@ Image requests must use character information explicitly approved by the user wi
 
 The backend should construct a bounded, traceable prompt from approved fields or user-approved guest-session context, record the source revision or session context, call the approved OpenAI image capability, validate the result, and present it as generated output. Provider model, image size/quality, storage, moderation, variant count, cost limits, and retention are `TBD`.
 
-The UI must communicate generation status, failure/retry, and whether an image is accepted. Guests may generate, review, and download an image without authentication; authentication is required only to persist the image or its source character in MongoDB. Image metadata must not claim official D&D art or imply canon status. Respect user rights, safety policy, and any third-party likeness restrictions.
+The UI must communicate generation status, failure/retry, and whether an image is accepted. Guests may generate, review, and download an image without authentication. Authentication is required to persist the source character/story in MongoDB; persistence of the generated image itself is `TBD` and must not block guest download. Image metadata must not claim official D&D art or imply canon status. Respect user rights, safety policy, and any third-party likeness restrictions.
 
 ## Board-ready character tokens
 

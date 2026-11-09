@@ -8,7 +8,7 @@ This document defines required API capabilities without prematurely selecting RE
 - Characters: create, list, read, update draft, resume, delete/archive, and approve story.
 - Wizard: read stage state, save stage input, navigate backward, and report save status.
 - AI: request contextual suggestion, accept/edit/reject suggestion, and retrieve audit state.
-- Images: request generation from approved data, inspect status, and retrieve approved output.
+- Images: request generation from approved data, inspect status, retrieve approved output, and download the validated result.
 - Character tokens: request a board-ready token from approved data, inspect status, accept/reject or regenerate it, and download/export the accepted asset.
 - D&D: select edition and return only content allowed by the content policy.
 
@@ -21,10 +21,10 @@ Every request must validate input and apply appropriate rate limits and safety c
 | Create/edit a session-scoped character story | Yes | Yes |
 | Request AI suggestions and story generation | Yes | Yes |
 | Generate/review/download an image or token | Yes | Yes |
-| Save character/story/revision/asset to MongoDB | No | Yes |
+| Save character/story/revision to MongoDB | No | Yes |
 | List, retrieve, or resume persisted characters | No | Yes, owner only |
 
-Exact guest session mechanism, rate limits, and result-retention period are `TBD`.
+Exact guest session mechanism, rate limits, result-retention period, and generated-asset persistence are `TBD`.
 
 ## Public D&D API integration
 

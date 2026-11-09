@@ -4,8 +4,8 @@ This file is the decision register. “Approved” means an agent may implement 
 
 | Area | Approved decision | Status / notes |
 |---|---|---|
-| Frontend | Next.js with SSR and Server Components, built on React | Approved; exact rendering, caching, and build configuration are `TBD`. |
-| Backend | NestJS on Node.js | Approved. |
+| Frontend | Next.js with SSR and Server Components, built on React and TypeScript, running on Node.js 24 LTS | Approved; exact rendering, caching, and build configuration are `TBD`. |
+| Backend | NestJS with TypeScript on Node.js 24 LTS | Approved; exact patch version and package manager are `TBD`. |
 | Database | MongoDB | Approved; hosting and ODM are `TBD`. |
 | AI | OpenAI | Approved; model IDs, quotas, and SDK version are `TBD`. |
 | Deployment | Vercel | Approved; environment topology is `TBD`. |
@@ -14,9 +14,10 @@ This file is the decision register. “Approved” means an agent may implement 
 | Editions | D&D 5e 2014 and Revised 5e 2024, stored and handled separately | Approved. |
 | Content | Official mechanical content only; narrative originality allowed within canon constraints | Approved. |
 | Auth | Authentication provider and session strategy | TBD. |
-| Access model | Guest generation and export; authentication required for MongoDB persistence and resume | Approved; guest retention and rate-limit values remain `TBD`. |
+| Access model | Guest generation and export; authentication required to save character/story data in MongoDB and resume it | Approved; guest retention, rate limits, and generated-asset persistence remain `TBD`. |
 | UI state | State-management library and form library | TBD. |
-| API | REST vs GraphQL, versioning, and error envelope | TBD; task 08 must not invent a final contract. |
+| Frontend styling | SCSS | Approved; Sass package/version, module strategy, naming conventions, and global/local split are `TBD`. |
+| API | REST vs GraphQL, versioning, and error envelope | TBD; implementation tasks must not invent a final contract before approval. |
 | Files | Image storage/provider and retention | TBD. |
 | Moderation | Safety policy and review workflow | TBD; must be resolved before production AI launch. |
 

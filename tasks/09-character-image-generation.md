@@ -17,9 +17,9 @@ Image workflow files only.
 ## Technical considerations
 Keep credentials server-side; do not claim official art or canon status; follow safety and rights policies.
 ## Acceptance criteria
-Guests can generate, review, and download an image without authentication; authenticated users can explicitly save it; requests are traceable to approved or clearly session-scoped inputs and never silently use rejected data.
+Guests can generate, review, and download an image without authentication; saving the source character/story requires authentication; image-binary persistence remains `TBD`; requests are traceable to approved or clearly session-scoped inputs and never silently use rejected data.
 ## Testing requirements
-Mock provider, guest-access, source-revision, optional-save authorization, failure, rate-limit, and UI-state tests.
+Mock provider, guest-access, source-revision, optional-save authorization, validated download, content-type/size limits, provider-URL secrecy, failure, rate-limit, and UI-state tests.
 ## Expected deliverables
 Image workflow and verification results.
 ## Completion checklist

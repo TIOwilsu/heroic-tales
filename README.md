@@ -4,8 +4,8 @@ Heroic Tales is an AI-powered Dungeons & Dragons character creation platform. It
 
 ## Technology baseline
 
-- Frontend: Next.js with SSR and Server Components, built on React.
-- Backend: NestJS on Node.js.
+- Frontend: Next.js with SSR and Server Components, built on React and TypeScript, styled with SCSS, using Node.js 24 LTS.
+- Backend: NestJS with TypeScript on Node.js 24 LTS.
 - Database: MongoDB.
 - AI integration: OpenAI.
 - Deployment: Vercel.

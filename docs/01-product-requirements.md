@@ -13,13 +13,14 @@ Each AI suggestion must expose an explicit accept, edit, and reject action. Acce
 - Show save state and recover safely from failed saves.
 - Allow final story review and explicit approval.
 - Use approved character information as the image-generation source.
+- Allow users to download validated generated images without authentication or database persistence.
 - Generate an optional board-ready character token from approved character information, with explicit user review and download/export behavior.
 - Distinguish official D&D content, original narrative content, and unverified content.
 - Keep 2014 and 2024 editions separate in data, prompts, and UI.
 
 ## Guest and authenticated access
 
-Authentication is not required to use the character-creation wizard, contextual AI assistance, story generation, image generation, character-token generation, review, or download/export. Authentication is required only when the user asks to persist a character, story, revision, or generated asset in MongoDB or to resume persisted work later.
+Authentication is not required to use the character-creation wizard, contextual AI assistance, story generation, image generation, character-token generation, review, or download/export. Authentication is required when the user asks to save a character, story, or revision in MongoDB or to resume persisted work later. Persistence of generated image/token binaries is `TBD` and must not block guest generation or download.
 
 Guest data must not be silently persisted as an owned database record. The UI must clearly communicate whether work is local/session-scoped or saved to the authenticated user's account, and must provide an explicit sign-in/save path when persistence is requested.
 

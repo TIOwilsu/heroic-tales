@@ -1,6 +1,12 @@
 # 06 — Backend architecture
 
-NestJS modules should isolate identity/access, characters, wizard progress, AI orchestration, D&D content, images, and health/operations. Controllers define transport concerns; services enforce domain rules; repositories isolate MongoDB access; provider adapters isolate OpenAI and any future storage service.
+NestJS modules should isolate identity/access, characters, wizard progress, AI orchestration, D&D content, images, and health/operations. The backend uses TypeScript. Controllers define transport concerns; services enforce domain rules; repositories isolate MongoDB access; provider adapters isolate OpenAI and any future storage service.
+
+## Node.js runtime
+
+Use Node.js 24 LTS as the project runtime baseline for both the Next.js frontend and the NestJS backend. Pin the major version in repository and deployment configuration so local development, CI, and Vercel builds use the same runtime. The exact patch version, package manager, and lockfile strategy are `TBD`.
+
+Next.js requires Node.js 20.9 or newer; Node.js 24 LTS is the approved conservative baseline. Do not upgrade to another major version without checking Next.js, NestJS, OpenAI SDK, MongoDB driver/ODM, and Vercel compatibility and recording the decision.
 
 All inputs require schema validation. Persistence and account-owned resources require authorization and ownership checks; guest generation endpoints require abuse controls but do not require authentication. AI endpoints must use server-side configuration, bounded inputs, timeouts, retry rules, provider error mapping, usage accounting, and audit records. Exact libraries, queueing, rate-limit store, and observability integration are `TBD`.
 
@@ -25,7 +31,7 @@ Frameworks and external systems
         -> domain entities and rules
 ```
 
-The domain must not import NestJS, MongoDB driver/ODM types, OpenAI SDK types, HTTP DTOs, environment access, or infrastructure services. The application layer depends on ports/interfaces. Infrastructure and NestJS modules provide the concrete adapters at the composition boundary.
+The domain must not import NestJS, MongoDB driver/ODM types, OpenAI SDK types, HTTP DTOs, environment access, or infrastructure services. TypeScript domain and application contracts should use explicit types and avoid leaking framework or provider types across boundaries. The application layer depends on ports/interfaces. Infrastructure and NestJS modules provide the concrete adapters at the composition boundary.
 
 ### Backend layers
 

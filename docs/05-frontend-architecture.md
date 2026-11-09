@@ -2,9 +2,19 @@
 
 The Next.js application should organize features around the user journey rather than provider-specific screens. Use SSR/Server Components for public or read-heavy surfaces where they improve initial delivery, and Client Components for the interactive wizard, AI suggestions, editing, image, and token workflows. Recommended boundaries are shell/navigation, authentication, dashboard, character editor, wizard stages, AI suggestion presentation, story approval, and image workflow. These are recommendations until the relevant task approves file conventions.
 
+The frontend uses TypeScript and Node.js 24 LTS, matching the NestJS backend runtime. TypeScript is the default language for Next.js pages, layouts, Server Components, Client Components, domain code, application use cases, adapters, tests, and configuration where supported. The Node.js major version must be pinned consistently across local development, CI, and Vercel. The exact patch version, TypeScript version, package manager, and lockfile strategy are `TBD`.
+
 The wizard needs draft state, persisted server state, save status, revision history visibility, edition selection, and explicit AI action states. A failed automatic save must not discard local input. Editing a prior step must clearly indicate whether later suggestions are now stale.
 
-Routing library, state library, form validation library, styling approach, and component library are `TBD`. Do not add one merely because it is conventional. All user-facing AI content needs loading, error, empty, accepted, rejected, and retry states.
+SCSS is the approved frontend styling approach. The routing library, state library, form validation library, component library, Sass package/version, module strategy, naming conventions, and global/local style split are `TBD`. Do not add one merely because it is conventional. All user-facing AI content needs loading, error, empty, accepted, rejected, and retry states.
+
+### SCSS rules
+
+- Keep design tokens, typography, Old Parchment surfaces, brand colors, and interaction states in a maintainable SCSS structure.
+- Keep styling concerns in the framework/infrastructure layer; domain and application code must not import SCSS or UI-specific modules.
+- Use scoped styles for components where the selected Next.js/Sass setup supports them, while reserving global styles for resets, typography, tokens, and application-wide states.
+- Preserve the exact approved H/T logo asset and the approved design-system colors; do not recreate the logo in SCSS.
+- Avoid adding a CSS framework or component library unless separately approved.
 
 ## Clean Architecture
 

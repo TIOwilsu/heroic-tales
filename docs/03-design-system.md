@@ -31,6 +31,8 @@ Do not redraw, retype, trace, animate, recolor, crop into a new mark, add effect
 
 Typography uses Cinzel for headings/branding and Inter for interface/body text. Font delivery and fallback stack are `TBD`.
 
+SCSS is the approved implementation approach for design tokens, layout primitives, responsive rules, component states, and theme variables. The Sass package/version, file organization, naming convention, and CSS-module/global-style split are `TBD`.
+
 ## Old-paper writing experience
 
 The default character-creation canvas should use Old Parchment as its background rather than a dark full-page background. The visual treatment should suggest a well-used fantasy journal:

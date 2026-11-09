@@ -33,7 +33,7 @@ Keep token data separate from full character images. Do not expose provider cred
 - A token request can use only approved character information or clearly labeled session-scoped inputs.
 - The source session context or authenticated source revision is recorded and visible in relevant metadata.
 - Users can review, regenerate, accept, reject, and download/export the token.
-- Guests can perform generation and download/export without authentication; authenticated access to persisted tokens is owner-only.
+- Guests can perform generation and download/export without authentication; persistence of token binaries is `TBD` and must not block guest access.
 - Provider, storage, safety, and malformed-output failures are handled without silently changing character data.
 
 ## Testing requirements

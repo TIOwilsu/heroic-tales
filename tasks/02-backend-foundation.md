@@ -3,7 +3,7 @@
 ## Objective
 Create the minimal NestJS/Node.js service foundation.
 ## Context
-NestJS is approved; API style, validation package, logging, and deployment runtime details are `TBD`.
+NestJS with TypeScript is approved; API style, validation package, logging, TypeScript version, and deployment runtime details are `TBD`.
 ## Prerequisites
 Task 00 complete; read `docs/04-system-architecture.md`, `docs/06-backend-architecture.md`, and `docs/08-api-specification.md`.
 ## Scope
@@ -29,4 +29,3 @@ NestJS foundation and verification results.
 - [ ] Tests run
 - [ ] Files/issues reported
 - [ ] Stop; do not start Task 03
-

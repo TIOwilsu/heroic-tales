@@ -16,7 +16,7 @@ Heroic Tales helps users create D&D characters through a guided wizard with cont
 ## Actors
 
 - Visitor: can create a character story, use contextual AI assistance, generate images and board-ready tokens, review results, and download/export them without authentication. Guest retention is session-scoped and `TBD`.
-- Authenticated user: can do everything available to a visitor and can save characters, stories, revisions, and reusable generated assets in MongoDB; resume behavior and export format are `TBD`.
+- Authenticated user: can do everything available to a visitor and can save characters, stories, and revisions in MongoDB; resume behavior, asset persistence, and export format are `TBD`.
 - Platform operator: manages operational configuration and safety processes; administrative UI and roles are `TBD`.
 
 ## Constraints

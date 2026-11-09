@@ -4,7 +4,7 @@
 Prepare repository conventions and documentation-aware development scaffolding without implementing product behavior.
 
 ## Context
-The approved baseline is Next.js with SSR/Server Components, NestJS/Node.js, MongoDB, OpenAI, and Vercel. Tooling choices remain `TBD` unless explicitly approved.
+The approved baseline is Next.js with SSR/Server Components and TypeScript, SCSS for frontend styling, NestJS with TypeScript on Node.js 24 LTS, MongoDB, OpenAI, and Vercel. Tooling choices remain `TBD` unless explicitly approved.
 
 ## Prerequisites
 Repository access; read `AGENTS.md`, `docs/00-project-overview.md`, `docs/02-approved-decisions.md`, and `docs/04-system-architecture.md`.

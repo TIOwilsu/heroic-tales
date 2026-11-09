@@ -2,7 +2,7 @@
 
 ## Logical boundary
 
-The Next.js frontend uses SSR/Server Components where appropriate and communicates with a dedicated NestJS API. The API owns optional authentication integration, authorization for protected persistence, validation, guest and authenticated character workflows, OpenAI calls, D&D content classification, persistence, and audit events. MongoDB stores authenticated user-owned character documents and revisions. Vercel hosts deployable web/API surfaces subject to platform limits.
+The TypeScript-based Next.js frontend uses SSR/Server Components where appropriate and communicates with a TypeScript-based NestJS API. The API owns optional authentication integration, authorization for protected persistence, validation, guest and authenticated character workflows, OpenAI calls, D&D content classification, persistence, and audit events. MongoDB stores authenticated user-owned character documents and revisions. Vercel hosts deployable web/API surfaces subject to platform limits.
 
 ```text
 Next.js frontend -> NestJS API -> MongoDB

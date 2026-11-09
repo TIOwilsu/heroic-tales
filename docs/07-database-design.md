@@ -6,7 +6,7 @@ Character records should include owner identity, title, selected edition, wizard
 
 Persist immutable or append-only revision metadata for accepted user decisions and AI actions. Do not store raw secrets. Retention, deletion/export behavior, and encrypted-field strategy are `TBD` and must be resolved before production data is collected.
 
-Guest generation is not persisted in these collections by default. A guest may receive session-scoped or ephemeral results, but a character, story, revision, image, or token becomes an owned MongoDB record only after authentication and an explicit save/persistence action.
+Guest generation is not persisted in these collections by default. A guest may receive session-scoped or ephemeral results, but a character, story, or revision becomes an owned MongoDB record only after authentication and an explicit save action. Persistence of generated image/token binaries is `TBD`; guest download must not depend on it.
 
 ## Character token records
 
