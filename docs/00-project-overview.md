@@ -15,10 +15,10 @@ Heroic Tales helps users create D&D characters through a guided wizard with cont
 
 ## Actors
 
-- Visitor: can view public product surfaces; exact anonymous capabilities are `TBD`.
-- Authenticated user: creates, saves, resumes, edits, approves, and exports characters; export format is `TBD`.
+- Visitor: can create a character story, use contextual AI assistance, generate images and board-ready tokens, review results, and download/export them without authentication. Guest retention is session-scoped and `TBD`.
+- Authenticated user: can do everything available to a visitor and can save characters, stories, revisions, and reusable generated assets in MongoDB; resume behavior and export format are `TBD`.
 - Platform operator: manages operational configuration and safety processes; administrative UI and roles are `TBD`.
 
 ## Constraints
 
-The approved stack is React, NestJS on Node.js, MongoDB, OpenAI, and Vercel. API credentials remain server-side. This documentation does not authorize application implementation by itself.
+The approved stack is Next.js with SSR/Server Components for the frontend, NestJS on Node.js for the backend API, MongoDB, OpenAI, and Vercel. API credentials remain server-side. This documentation does not authorize application implementation by itself.

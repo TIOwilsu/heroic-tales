@@ -2,7 +2,7 @@
 
 NestJS modules should isolate identity/access, characters, wizard progress, AI orchestration, D&D content, images, and health/operations. Controllers define transport concerns; services enforce domain rules; repositories isolate MongoDB access; provider adapters isolate OpenAI and any future storage service.
 
-All inputs require schema validation, authorization, and ownership checks. AI endpoints must use server-side configuration, bounded inputs, timeouts, retry rules, provider error mapping, usage accounting, and audit records. Exact libraries, queueing, rate-limit store, and observability integration are `TBD`.
+All inputs require schema validation. Persistence and account-owned resources require authorization and ownership checks; guest generation endpoints require abuse controls but do not require authentication. AI endpoints must use server-side configuration, bounded inputs, timeouts, retry rules, provider error mapping, usage accounting, and audit records. Exact libraries, queueing, rate-limit store, and observability integration are `TBD`.
 
 The backend must reject attempts to mutate approved fields through an AI response path unless a user action explicitly authorizes the change. Version conflicts should be handled deliberately; conflict UX is `TBD`.
 
@@ -31,7 +31,7 @@ Contains entities, value objects, domain errors, and pure rules for characters, 
 
 #### Application
 
-Contains use cases such as `CreateCharacter`, `SaveWizardStep`, `ResumeCharacter`, `RequestAISuggestion`, `AcceptSuggestion`, `RejectSuggestion`, `ApproveFinalStory`, and `RequestCharacterImage`. Use cases coordinate authorization, validation, repositories, provider ports, audit recording, and transactions where required. They must not depend on transport or vendor response shapes.
+Contains use cases such as `CreateCharacter`, `SaveWizardStep`, `ResumeCharacter`, `RequestAISuggestion`, `AcceptSuggestion`, `RejectSuggestion`, `ApproveFinalStory`, `RequestCharacterImage`, and `RequestCharacterToken`. Use cases coordinate validation, optional authentication, authorization for persistence, repositories, provider ports, audit recording, and transactions where required. They must not depend on transport or vendor response shapes.
 
 #### Interface adapters
 
@@ -79,7 +79,7 @@ NestJS feature modules may group files differently, provided that module boundar
 - OpenAI requests must be created by a server-side adapter from validated application data and must return a validated application result.
 - AI responses are suggestions until a user-authorized use case changes the character aggregate.
 - Approved character fields, drafts, rejected suggestions, and generated-image source revisions must remain distinct in application contracts.
-- Authorization and ownership checks must run before reading or mutating user-owned data.
+- Authorization and ownership checks must run before reading or mutating user-owned data. Guest generation must not create user-owned database records.
 - Audit events must record user-authorized AI actions and relevant source revisions without storing secrets or unnecessary sensitive content.
 
 ### Request and provider flow

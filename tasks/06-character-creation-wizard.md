@@ -3,7 +3,7 @@
 ## Objective
 Deliver the seven-stage guided creation flow with autosave and backward editing.
 ## Context
-Stages are Initial Concept, Identity, Origin, Past, Personality, Relationships, and Final Story.
+Stages are Initial Concept, Identity, Origin, Past, Personality, Relationships, and Final Story. The wizard must support guest session-scoped creation as well as authenticated persistence.
 ## Prerequisites
 Tasks 01 and 05; read `docs/01-product-requirements.md`, `docs/03-design-system.md`, and `docs/05-frontend-architecture.md`.
 ## Scope
@@ -17,7 +17,7 @@ Wizard and directly related character files only.
 ## Technical considerations
 AI actions may be placeholders until Task 07 but must have explicit state boundaries.
 ## Acceptance criteria
-Users can complete, pause, resume, navigate backward, leave optional fields empty, and explicitly approve final story.
+Guests can complete, pause within the supported session scope, navigate backward, leave optional fields empty, and explicitly approve a final story. Authenticated users can additionally save and resume the character from MongoDB.
 ## Testing requirements
 Component/state and end-to-end critical journey tests, including failed save recovery.
 ## Expected deliverables
@@ -28,4 +28,3 @@ Wizard flow, tests, and updated progress checklist.
 - [ ] Autosave/backward-edit tests pass
 - [ ] Files/issues reported
 - [ ] Stop; do not start Task 07
-

@@ -4,7 +4,7 @@ Heroic Tales is an AI-powered Dungeons & Dragons character creation platform. It
 
 ## Technology baseline
 
-- Frontend: React.
+- Frontend: Next.js with SSR and Server Components, built on React.
 - Backend: NestJS on Node.js.
 - Database: MongoDB.
 - AI integration: OpenAI.
@@ -51,13 +51,14 @@ heroic-tales/
     ├── 07-ai-integration.md
     ├── 08-story-generation.md
     ├── 09-character-image-generation.md
-    ├── 10-dnd-knowledge-base.md
-    ├── 11-dashboard.md
-    ├── 12-testing.md
-    └── 13-deployment.md
+    ├── 10-character-token-generation.md
+    ├── 11-dnd-knowledge-base.md
+    ├── 12-dashboard.md
+    ├── 13-testing.md
+    └── 14-deployment.md
 ```
 
-Start with `docs/00-project-overview.md`, `docs/01-product-requirements.md`, and `docs/02-approved-decisions.md`. Read the architecture document relevant to the requested task before changing code.
+Start with `docs/00-project-overview.md`, `docs/01-product-requirements.md`, and `docs/02-approved-decisions.md`. Read the architecture document relevant to the requested task before changing code. Next.js is the approved frontend framework; NestJS remains the dedicated backend API.
 
 ## Incremental execution
 
@@ -65,7 +66,7 @@ The roadmap is planning information, not authorization to implement the whole pr
 
 > Execute Task 00 only. Read `AGENTS.md`, inspect the repository, verify prerequisites, and stop after the task checklist.
 
-> Execute Task 06 only. Do not begin Task 07 or any other task.
+> Execute Task 10 only. Do not begin Task 11 or any other task.
 
 Every task requires repository inspection, documentation review, scope control, tests, acceptance-criteria verification, a change summary, and a stop. If a prerequisite or important decision is missing, ask before expanding scope.
 

@@ -6,3 +6,4 @@ Required layers are unit tests for domain rules, integration tests for NestJS/Mo
 
 Minimum critical scenarios: autosave and resume, backward editing, accept/edit/reject AI flow, approved data protection, edition isolation, official/unverified labeling, image source revision, provider failure, unauthorized access, and safe secret configuration.
 
+Token-specific scenarios must cover approved-revision source binding, rejection of unapproved data, accept/reject/regenerate behavior, download authorization, provenance labeling, malformed or unsafe provider output, storage failure, and the distinction between a board-ready token and official D&D content.

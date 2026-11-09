@@ -4,7 +4,7 @@ This file is the decision register. “Approved” means an agent may implement 
 
 | Area | Approved decision | Status / notes |
 |---|---|---|
-| Frontend | React | Approved; build tooling is `TBD`. |
+| Frontend | Next.js with SSR and Server Components, built on React | Approved; exact rendering, caching, and build configuration are `TBD`. |
 | Backend | NestJS on Node.js | Approved. |
 | Database | MongoDB | Approved; hosting and ODM are `TBD`. |
 | AI | OpenAI | Approved; model IDs, quotas, and SDK version are `TBD`. |
@@ -14,6 +14,7 @@ This file is the decision register. “Approved” means an agent may implement 
 | Editions | D&D 5e 2014 and Revised 5e 2024, stored and handled separately | Approved. |
 | Content | Official mechanical content only; narrative originality allowed within canon constraints | Approved. |
 | Auth | Authentication provider and session strategy | TBD. |
+| Access model | Guest generation and export; authentication required for MongoDB persistence and resume | Approved; guest retention and rate-limit values remain `TBD`. |
 | UI state | State-management library and form library | TBD. |
 | API | REST vs GraphQL, versioning, and error envelope | TBD; task 08 must not invent a final contract. |
 | Files | Image storage/provider and retention | TBD. |
@@ -26,5 +27,6 @@ Additional approved architecture and product direction:
 | Application architecture | Clean Architecture dependency direction for frontend and backend | Approved; concrete folder conventions and adapter libraries remain `TBD`. |
 | D&D data access | Public D&D APIs may be used through a server-side adapter | Approved in principle; provider, license/terms, fields, and synchronization strategy remain `TBD`. |
 | Visual direction | Tactile fantasy character journal with Old Parchment as the primary writing surface | Approved; texture asset and exact layout tokens remain `TBD`. |
+| Character tokens | Optional board-ready visual token generated from approved character information | Approved; token format, storage, and board/VTT integrations remain `TBD`. |
 
 Changes require a dated entry, rationale, affected documents, and explicit approval by the project owner.

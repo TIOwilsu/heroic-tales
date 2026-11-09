@@ -1,6 +1,6 @@
 # 09 — AI integration
 
-OpenAI supports concept development, narrative improvements, backstory generation, personality and relationship exploration, and appropriate image workflows. The server owns credentials, model configuration, prompts, usage limits, safety checks, and provider errors.
+OpenAI supports concept development, narrative improvements, backstory generation, personality and relationship exploration, and appropriate image workflows for both guest and authenticated users. The server owns credentials, model configuration, prompts, usage limits, safety checks, and provider errors. Authentication is required only when the user asks to persist the result in MongoDB.
 
 ## Grounding and control
 
@@ -11,4 +11,3 @@ Mechanical claims require a trusted approved source or must be labeled unverifie
 ## Failure and safety
 
 Handle provider outage, refusal, malformed output, timeout, quota exhaustion, prompt injection in user text, and unsafe image/story requests. Log request metadata without secrets or unnecessary personal content. A human review/escalation policy is `TBD`.
-

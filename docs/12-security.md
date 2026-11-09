@@ -4,5 +4,4 @@ Use server-side secrets only; keep keys in deployment secret configuration and o
 
 Protect draft and approved character data in transit and at rest using platform capabilities. Define retention, deletion, export, account recovery, abuse reporting, audit access, and incident response before production; these are `TBD`.
 
-Threat-model prompt injection, malicious character text, cross-tenant access, provider abuse, cost exhaustion, image misuse, and D&D content leakage. Security tests must cover authorization boundaries and secret handling.
-
+Threat-model prompt injection, malicious character text, cross-tenant access, anonymous provider abuse, cost exhaustion, image misuse, and D&D content leakage. Guest generation must have server-side rate limiting, request bounds, safety checks, and cost controls even though authentication is not required. Security tests must cover authorization boundaries and secret handling.

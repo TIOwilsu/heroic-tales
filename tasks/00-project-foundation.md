@@ -4,7 +4,7 @@
 Prepare repository conventions and documentation-aware development scaffolding without implementing product behavior.
 
 ## Context
-The approved baseline is React, NestJS/Node.js, MongoDB, OpenAI, and Vercel. Tooling choices remain `TBD` unless explicitly approved.
+The approved baseline is Next.js with SSR/Server Components, NestJS/Node.js, MongoDB, OpenAI, and Vercel. Tooling choices remain `TBD` unless explicitly approved.
 
 ## Prerequisites
 Repository access; read `AGENTS.md`, `docs/00-project-overview.md`, `docs/02-approved-decisions.md`, and `docs/04-system-architecture.md`.
@@ -43,4 +43,3 @@ Minimal foundation changes and a decision/pending-issue summary.
 - [ ] Tests run
 - [ ] Files and pending decisions reported
 - [ ] Stop without starting Task 01
-

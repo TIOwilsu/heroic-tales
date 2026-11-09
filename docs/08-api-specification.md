@@ -4,14 +4,27 @@ This document defines required API capabilities without prematurely selecting RE
 
 ## Required capability groups
 
-- Identity: session/current-user and sign-out behavior.
+- Identity: optional session/current-user and sign-out behavior; required for protected persistence operations.
 - Characters: create, list, read, update draft, resume, delete/archive, and approve story.
 - Wizard: read stage state, save stage input, navigate backward, and report save status.
 - AI: request contextual suggestion, accept/edit/reject suggestion, and retrieve audit state.
 - Images: request generation from approved data, inspect status, and retrieve approved output.
+- Character tokens: request a board-ready token from approved data, inspect status, accept/reject or regenerate it, and download/export the accepted asset.
 - D&D: select edition and return only content allowed by the content policy.
 
-Every mutation must enforce ownership, validate payloads, return a stable status/error model once selected, and be idempotent where retries are expected. Do not copy an API provider's response directly into a public contract.
+Every request must validate input and apply appropriate rate limits and safety controls. Guest generation/export operations may be unauthenticated; mutations that persist or retrieve account-owned data must enforce authentication and ownership. Return a stable status/error model once selected and be idempotent where retries are expected. Do not copy an API provider's response directly into a public contract.
+
+## Access matrix
+
+| Capability | Guest | Authenticated |
+|---|---:|---:|
+| Create/edit a session-scoped character story | Yes | Yes |
+| Request AI suggestions and story generation | Yes | Yes |
+| Generate/review/download an image or token | Yes | Yes |
+| Save character/story/revision/asset to MongoDB | No | Yes |
+| List, retrieve, or resume persisted characters | No | Yes, owner only |
+
+Exact guest session mechanism, rate limits, and result-retention period are `TBD`.
 
 ## Public D&D API integration
 
@@ -19,7 +32,7 @@ Heroic Tales may use a public D&D API as a source for D&D data, subject to sourc
 
 ### Integration boundary
 
-The backend must access public D&D APIs through a server-side provider adapter. The React client must not call the external API directly. The adapter is responsible for:
+The backend must access public D&D APIs through a server-side provider adapter. Neither the Next.js browser client nor Next.js server rendering code should bypass the NestJS API for external D&D access. The adapter is responsible for:
 
 - validating the external response;
 - mapping it into an internal, versioned D&D data contract;

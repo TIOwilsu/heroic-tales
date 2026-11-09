@@ -1,6 +1,6 @@
 # 05 — Frontend architecture
 
-The React application should organize features around the user journey rather than provider-specific screens. Recommended boundaries are shell/navigation, authentication, dashboard, character editor, wizard stages, AI suggestion presentation, story approval, and image workflow. These are recommendations until the relevant task approves file conventions.
+The Next.js application should organize features around the user journey rather than provider-specific screens. Use SSR/Server Components for public or read-heavy surfaces where they improve initial delivery, and Client Components for the interactive wizard, AI suggestions, editing, image, and token workflows. Recommended boundaries are shell/navigation, authentication, dashboard, character editor, wizard stages, AI suggestion presentation, story approval, and image workflow. These are recommendations until the relevant task approves file conventions.
 
 The wizard needs draft state, persisted server state, save status, revision history visibility, edition selection, and explicit AI action states. A failed automatic save must not discard local input. Editing a prior step must clearly indicate whether later suggestions are now stale.
 
@@ -8,7 +8,7 @@ Routing library, state library, form validation library, styling approach, and c
 
 ## Clean Architecture
 
-The React frontend must use Clean Architecture as an organizing principle. The goal is to keep product rules and user decisions independent from React, browser APIs, the selected transport, and third-party libraries. Clean Architecture is a structural constraint, not permission to add a framework or dependency.
+The Next.js frontend must use Clean Architecture as an organizing principle. The goal is to keep product rules and user decisions independent from Next.js, React, browser APIs, the selected transport, and third-party libraries. Clean Architecture is a structural constraint, not permission to add a framework or dependency.
 
 ### Dependency rule
 
@@ -39,7 +39,7 @@ Contains view models, presenters, form mappers, state orchestration, and control
 
 #### Frameworks and infrastructure
 
-Contains React components, routing, browser storage, network clients, API adapters, and dependency wiring. This layer may depend on the inner layers. The concrete state-management library, routing library, HTTP client, and form library remain `TBD`.
+Contains Next.js routes/layouts, React Server and Client Components, browser storage, network clients, API adapters, and dependency wiring. This layer may depend on the inner layers. The concrete state-management library, routing library, HTTP client, and form library remain `TBD`.
 
 ### Suggested feature structure
 
@@ -67,9 +67,10 @@ src/
 
 Feature-oriented alternatives may be used only if they preserve the same dependency direction and boundaries. A decision to use a different layout must be recorded before implementation.
 
-### React-specific rules
+### Next.js and React rules
 
-- Components render state and emit user intent; they do not contain character business rules or call OpenAI directly.
+- Server and Client Components render state and emit user intent; they do not contain character business rules or call OpenAI directly.
+- SSR and Server Components may load public/read-only data, but sensitive mutations and business rules remain behind the NestJS API.
 - Hooks may coordinate use cases and UI lifecycle, but must not become an unbounded service layer.
 - API clients and browser persistence belong to infrastructure and are injected through application ports.
 - AI suggestion actions must be explicit commands. A successful provider response is not an automatic character mutation.

@@ -1,4 +1,4 @@
-# Task 11 — Dashboard
+# Task 12 — Dashboard
 
 ## Objective
 Provide a focused dashboard for creating, resuming, and managing user-owned characters.
@@ -27,5 +27,4 @@ Dashboard and tests.
 - [ ] Existing UI reused
 - [ ] Acceptance tests pass
 - [ ] Files/issues reported
-- [ ] Stop; do not start Task 12
-
+- [ ] Stop; do not start Task 13

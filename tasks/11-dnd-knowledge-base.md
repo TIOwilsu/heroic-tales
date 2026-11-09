@@ -1,4 +1,4 @@
-# Task 10 — D&D knowledge base
+# Task 11 — D&D knowledge base
 
 ## Objective
 Implement only an approved, licensed approach to D&D content classification and retrieval.
@@ -27,4 +27,4 @@ Permitted content boundary and source register.
 - [ ] Edition tests pass
 - [ ] No unlicensed corpus added
 - [ ] Files/issues reported
-- [ ] Stop; do not start Task 11
+- [ ] Stop; do not start Task 12

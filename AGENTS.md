@@ -3,7 +3,7 @@
 These rules apply to every AI coding agent working in this repository.
 
 1. Read the documentation before implementation, including this file, the requested task, relevant architecture documents, and approved decisions.
-2. Follow approved architectural decisions. Do not replace React, NestJS/Node.js, MongoDB, OpenAI, or Vercel without explicit authorization.
+2. Follow approved architectural decisions. Do not replace Next.js, NestJS/Node.js, MongoDB, OpenAI, or Vercel without explicit authorization. Next.js is the approved frontend framework; React remains its underlying UI library.
 3. Preserve the established design system and the exact approved H/T intertwined serif monogram. Do not invent ornaments or visual requirements.
 4. Do not invent product requirements. Mark unselected decisions as `TBD` and ask when the decision affects scope, security, compatibility, or cost.
 5. Do not introduce unnecessary dependencies or undocumented services.
@@ -14,4 +14,3 @@ These rules apply to every AI coding agent working in this repository.
 10. Update documentation when an approved decision changes; record the decision and its rationale before relying on it.
 11. Do not overwrite existing work without understanding it. Prefer focused changes and avoid unrelated refactoring.
 12. At completion, run required tests, verify acceptance criteria, summarize changes and pending issues, update relevant checklists, and stop.
-

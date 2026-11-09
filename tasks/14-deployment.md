@@ -1,4 +1,4 @@
-# Task 13 — Deployment
+# Task 14 — Deployment
 
 ## Objective
 Prepare a safe Vercel deployment for the implemented, approved scope.
@@ -28,4 +28,3 @@ Vercel configuration, runbook updates, and verification report.
 - [ ] Smoke tests pass
 - [ ] Rollback and pending issues recorded
 - [ ] Stop; do not execute any additional task
-

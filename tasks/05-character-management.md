@@ -1,9 +1,9 @@
 # Task 05 — Character management
 
 ## Objective
-Implement user-owned character draft CRUD and resume support.
+Implement authenticated user-owned character draft CRUD and resume support while preserving guest session-scoped creation.
 ## Context
-Characters must autosave, retain revisions, support optional fields, and preserve edition separation.
+Characters must autosave, retain revisions, support optional fields, and preserve edition separation. Guest work may remain local/session-scoped; MongoDB persistence requires authentication and an explicit save action.
 ## Prerequisites
 Tasks 00–04; read `docs/01-product-requirements.md`, `docs/07-database-design.md`, and `docs/08-api-specification.md`.
 ## Scope
@@ -17,7 +17,7 @@ Character domain/API/persistence files only.
 ## Technical considerations
 Approved fields must not be overwritten by ordinary draft updates; deletion semantics are subject to the documented retention decision.
 ## Acceptance criteria
-An authenticated user can create, save, resume, edit, and retrieve only their own characters.
+An authenticated user can create, save, resume, edit, and retrieve only their own characters, while a guest can create and edit a session-scoped character without being blocked by authentication.
 ## Testing requirements
 CRUD, authorization, revision, edition isolation, and failure-retry tests.
 ## Expected deliverables
@@ -28,4 +28,3 @@ Character management implementation and tests.
 - [ ] Acceptance tests pass
 - [ ] Files/issues reported
 - [ ] Stop; do not start Task 06
-

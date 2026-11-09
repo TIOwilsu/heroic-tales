@@ -1,13 +1,13 @@
 # Task 01 — Frontend foundation
 
 ## Objective
-Create the minimal React application foundation needed for later UI tasks.
+Create the minimal Next.js application foundation needed for later UI tasks.
 ## Context
-React is approved; styling, routing, state, forms, and build tooling are `TBD`.
+Next.js with SSR/Server Components is approved; styling, routing conventions, state, forms, and build tooling are `TBD`.
 ## Prerequisites
 Task 00 complete; read `docs/03-design-system.md` and `docs/05-frontend-architecture.md`.
 ## Scope
-Only the React shell, approved design tokens, and a minimal verification surface.
+Only the Next.js shell, approved design tokens, rendering boundaries, and a minimal verification surface.
 ## Explicit exclusions
 No wizard, dashboard, auth, AI, API integration, or unapproved library.
 ## Implementation steps
@@ -21,7 +21,7 @@ The shell renders, is responsive at basic breakpoints, uses approved colors/type
 ## Testing requirements
 Run frontend unit/render checks and lint/type checks available in the repository.
 ## Expected deliverables
-React shell, token foundation, tests, and pending-decision list.
+Next.js shell, token foundation, rendering-boundary tests, and pending-decision list.
 ## Completion checklist
 - [ ] Read prerequisites and decisions
 - [ ] Existing implementation inspected
@@ -29,4 +29,3 @@ React shell, token foundation, tests, and pending-decision list.
 - [ ] Tests run
 - [ ] Summary/files/issues recorded
 - [ ] Stop; do not start Task 02
-

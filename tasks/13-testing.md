@@ -1,4 +1,4 @@
-# Task 12 — Testing
+# Task 13 — Testing
 
 ## Objective
 Expand automated coverage for implemented Heroic Tales behavior without changing product scope.
@@ -27,5 +27,4 @@ Tests, coverage/gap report, and pending risks.
 - [ ] Existing coverage inspected
 - [ ] Tests deterministic and passing
 - [ ] Gaps reported
-- [ ] Stop; do not start Task 13
-
+- [ ] Stop; do not start Task 14
