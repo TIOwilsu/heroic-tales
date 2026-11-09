@@ -8,6 +8,14 @@ The primary experience should feel like the user is physically writing a charact
 
 Use the exact H/T intertwined serif monogram supplied by the user: antique gold lettering on a deep purple-black background. Do not redesign it or add swords, shields, crests, magical circles, runes, or decorative substitutes.
 
+## Official logo usage
+
+The supplied image is the authoritative Heroic Tales logo reference: an intertwined serif H/T monogram in Antique Gold on the Brand Background (`#100C20`). The image must be used as provided, preserving its letterforms, proportions, colors, and negative space.
+
+Approved uses include the Next.js site header, landing page, authentication surfaces, loading/splash state, and other brand-level surfaces. The logo may be placed over the Brand Background or an equivalent approved dark brand surface. It must not be placed over the Old Parchment writing canvas unless a future logo variant is explicitly approved.
+
+Do not redraw, retype, trace, animate, recolor, crop into a new mark, add effects, or combine the logo with swords, shields, crests, circles, runes, borders, or other ornaments. The canonical asset file, responsive variants, minimum size, clear-space rule, and light-background variant are `TBD`; until then, agents must use the supplied asset without modification and must not invent a replacement.
+
 ## Tokens
 
 | Token | Value | Intended use |

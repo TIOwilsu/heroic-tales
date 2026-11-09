@@ -6,6 +6,10 @@ All inputs require schema validation. Persistence and account-owned resources re
 
 The backend must reject attempts to mutate approved fields through an AI response path unless a user action explicitly authorizes the change. Version conflicts should be handled deliberately; conflict UX is `TBD`.
 
+## Brand asset boundary
+
+The supplied H/T monogram is a frontend brand asset governed by `docs/03-design-system.md`. The NestJS backend must not redraw, transform, recolor, embed, or use the logo in AI prompts, character images, character tokens, D&D data, or generated content. Next.js owns presentation of the canonical asset; backend responses remain brand-neutral unless a future asset-delivery decision explicitly approves a reference or URL.
+
 ## Clean Architecture
 
 The NestJS backend must use Clean Architecture to keep business rules independent from NestJS decorators, MongoDB, OpenAI, HTTP, and deployment details. This is an architectural constraint; it does not authorize adding an ORM, queue, event bus, or other dependency that is currently `TBD`.
@@ -35,7 +39,7 @@ Contains use cases such as `CreateCharacter`, `SaveWizardStep`, `ResumeCharacter
 
 #### Interface adapters
 
-Contains NestJS controllers, request/response DTOs, guards, presenters, mappers, and exception translators. Controllers should remain thin: authenticate the request, validate transport input, invoke a use case, and map the result to the selected API contract. The REST/GraphQL choice and final error envelope remain `TBD`.
+Contains NestJS controllers, request/response DTOs, guards, presenters, mappers, and exception translators. Controllers should remain thin: resolve optional identity, enforce authentication for protected persistence operations, validate transport input, invoke a use case, and map the result to the selected API contract. The REST/GraphQL choice and final error envelope remain `TBD`.
 
 #### Infrastructure
 
