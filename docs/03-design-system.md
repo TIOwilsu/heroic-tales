@@ -68,3 +68,20 @@ Exact components and state tokens are `TBD` until the frontend architecture task
 ## Interaction guidance
 
 Every AI result must visually distinguish suggested, user-edited, accepted, rejected, and approved states. Responsive behavior, spacing scale, component catalog, and exact accessibility conformance are `TBD`; do not invent them in a task without recording a decision. Contrast must be checked for parchment text, dark brand surfaces, gold accents, and all state treatments.
+
+## Storybook component documentation
+
+Storybook is the approved documentation surface for reusable frontend components and the design system. It must document the visual contract of each component independently from product workflows.
+
+Each documented component should include, where relevant:
+
+- Its purpose and intended usage.
+- Supported variants, sizes, responsive behavior, and interaction states.
+- Draft, AI suggestion, user-edited, accepted, rejected, and approved states when applicable.
+- Keyboard, focus, reduced-motion, and contrast expectations.
+- Examples using the approved Heroic Tales colors, typography roles, Old Parchment writing surface, and exact logo asset rules.
+- Clear notes for any `TBD` behavior or asset dependency.
+
+Storybook stories must use representative, non-sensitive fixture data. They must not call OpenAI, the NestJS API, MongoDB, public D&D APIs, or browser persistence directly. Provider and application behavior belongs in unit or integration tests; Storybook documents presentation and interaction contracts.
+
+The Storybook version, Next.js framework adapter, addon set, styling integration, and build command are `TBD` until the Storybook setup step is executed. The setup must update `package.json` and the lockfile together and must not add addons without documenting their purpose.

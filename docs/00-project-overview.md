@@ -22,3 +22,18 @@ Heroic Tales helps users create D&D characters through a guided wizard with cont
 ## Constraints
 
 The approved stack is Next.js with SSR/Server Components for the frontend, NestJS on Node.js for the backend API, MongoDB, OpenAI, and Vercel. API credentials remain server-side. This documentation does not authorize application implementation by itself.
+
+## Local package setup
+
+The repository contains separate npm packages in `frontend/` and `backend/`. From the repository root, install both dependency sets with:
+
+```bash
+npm run install:all
+```
+
+This command runs `npm install` in each package and preserves separate manifests and lockfiles. It requires Node.js 24 LTS and npm. Package-level installation remains available when working on one application only:
+
+```bash
+npm --prefix frontend install
+npm --prefix backend install
+```

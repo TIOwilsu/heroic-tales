@@ -1,0 +1,14 @@
+{
+  "name": "heroic-tales-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "install:all": "node scripts/install-all.mjs",
+    "dev:all": "node scripts/dev-all.mjs",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run start:dev"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

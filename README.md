@@ -10,6 +10,8 @@ Heroic Tales is an AI-powered Dungeons & Dragons character creation platform. It
 - AI integration: OpenAI.
 - Deployment: Vercel.
 
+The repository uses separate application packages: `frontend/` for the Next.js frontend and `backend/` for NestJS. The root workspace owns shared documentation and orchestration only. Install all application dependencies with `npm run install:all`, then run both development servers with `npm run dev:all`.
+
 These choices are approved and must not be replaced without an explicit architecture decision. Unselected libraries, authentication providers, observability products, queues, and infrastructure services are `TBD`.
 
 ## Documentation map
@@ -20,6 +22,14 @@ These choices are approved and must not be replaced without an explicit architec
 
 ```text
 heroic-tales/
+├── frontend/
+│   ├── package.json
+│   ├── app/
+│   └── ...
+├── backend/
+│   ├── package.json
+│   ├── src/
+│   └── ...
 ├── README.md
 ├── AGENTS.md
 ├── docs/

@@ -12,6 +12,10 @@ Next.js frontend -> NestJS API -> MongoDB
 
 The client never calls OpenAI directly and never receives provider credentials. Domain modules should separate character data, AI orchestration, D&D content, authentication, and image workflows.
 
+The repository uses separate application packages: `frontend/` contains the Next.js application and `backend/` contains the NestJS API. The repository root contains shared documentation and orchestration. The root `dev:all` command starts both development servers without adding a process-manager dependency.
+
+Dependency setup is also orchestrated from the repository root. `npm run install:all` installs dependencies in `frontend/` and `backend/` sequentially; it does not merge their manifests or lockfiles. Use package-level `npm --prefix <package> install` only when intentionally installing one package.
+
 Frontend and backend implementations must preserve Clean Architecture dependency direction: domain rules and application use cases remain independent from React, NestJS, MongoDB, OpenAI, HTTP, and browser concerns. Public D&D API access belongs behind a server-side infrastructure adapter and must return provenance-aware, edition-scoped data through the backend's internal contract.
 
 Character images and board-ready tokens are separate application workflows. Both must be traceable to an approved character revision; a token must not be treated as a generic crop of an unapproved or rejected image unless that behavior is explicitly approved later.

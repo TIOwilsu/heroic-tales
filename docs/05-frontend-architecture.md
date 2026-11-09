@@ -2,7 +2,11 @@
 
 The Next.js application should organize features around the user journey rather than provider-specific screens. Use SSR/Server Components for public or read-heavy surfaces where they improve initial delivery, and Client Components for the interactive wizard, AI suggestions, editing, image, and token workflows. Recommended boundaries are shell/navigation, authentication, dashboard, character editor, wizard stages, AI suggestion presentation, story approval, and image workflow. These are recommendations until the relevant task approves file conventions.
 
-The frontend uses TypeScript and Node.js 24 LTS, matching the NestJS backend runtime. TypeScript is the default language for Next.js pages, layouts, Server Components, Client Components, domain code, application use cases, adapters, tests, and configuration where supported. The Node.js major version must be pinned consistently across local development, CI, and Vercel. The exact patch version, TypeScript version, package manager, and lockfile strategy are `TBD`.
+## Frontend package boundary
+
+All frontend application files live under `frontend/`. This includes the Next.js package manifest, App Router files, TypeScript configuration, SCSS, Storybook configuration and stories, ESLint configuration, public assets, and frontend tests. The repository root is reserved for shared documentation, orchestration, and repository-level configuration.
+
+The frontend uses TypeScript and Node.js 24 LTS, matching the NestJS backend runtime. TypeScript is the default language for Next.js pages, layouts, Server Components, Client Components, domain code, application use cases, adapters, tests, and configuration where supported. The Node.js major version must be pinned consistently across local development, CI, and Vercel. The current foundation uses Next.js `15.5.x`, React `19.1.x`, TypeScript `5.9.x`, npm, and a package lockfile; future upgrades require compatibility review.
 
 The wizard needs draft state, persisted server state, save status, revision history visibility, edition selection, and explicit AI action states. A failed automatic save must not discard local input. Editing a prior step must clearly indicate whether later suggestions are now stale.
 
@@ -90,3 +94,31 @@ Feature-oriented alternatives may be used only if they preserve the same depende
 ### Testing consequences
 
 Domain rules and use cases should be tested without a browser or network. Adapter tests should verify mapping and error translation. Component tests should verify rendering and user intent, while a smaller number of integration tests should verify that dependency wiring connects the UI to the correct adapters. Tests must prove that an AI response cannot overwrite approved information without an explicit user action.
+
+## Storybook documentation boundary
+
+Use Storybook as the isolated documentation surface for the frontend component catalog and design-system contracts. Stories belong to the framework/infrastructure and interface-adapter concerns; they may compose presentational components and fixture data but must not become an alternative application layer.
+
+Storybook stories must:
+
+- Render components with deterministic fixture data and explicit states.
+- Demonstrate responsive layouts, loading, error, empty, accepted, rejected, and approved states where applicable.
+- Show accessibility-relevant focus, keyboard, contrast, and reduced-motion behavior.
+- Use the approved SCSS tokens and typography roles without recreating the H/T logo.
+- Avoid direct calls to OpenAI, NestJS endpoints, MongoDB, public D&D APIs, or browser persistence.
+
+The frontend foundation uses Storybook `9.1.x` with the `@storybook/nextjs` adapter. Stories live under `app/` or `stories/` and use deterministic fixture data. No addons are configured yet. CI/build integration beyond the `storybook` and `build-storybook` package scripts remains `TBD`.
+
+## ESLint quality step
+
+The frontend must use ESLint to detect correctness, maintainability, and prohibited dependency-boundary patterns in TypeScript, Next.js, React, and Storybook code. ESLint is a quality gate and must not replace type checking, tests, accessibility checks, or code review.
+
+The frontend ESLint setup must:
+
+- Lint application source, configuration, and Storybook stories that belong to the frontend.
+- Respect the Clean Architecture dependency direction; framework, UI, and infrastructure concerns must not leak into domain or application code. The exact boundary-enforcement rule or plugin is `TBD`.
+- Cover React and Next.js conventions without imposing rules that contradict Server Components, Client Components, or the approved SCSS approach.
+- Report unsafe patterns without exposing secrets, prompts, environment values, or generated user content.
+- Run as a documented local command and as a CI quality gate once CI is configured.
+
+The frontend foundation uses ESLint `9.39.x` with flat configuration in `eslint.config.mjs`. It covers Next.js, React, TypeScript, and Storybook files through the configured plugins and runs with `npm run lint`. The auto-fix policy, CI enforcement, and whether rules are shared with the backend remain `TBD`; this step does not configure backend linting.

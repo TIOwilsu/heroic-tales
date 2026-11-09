@@ -4,7 +4,7 @@ NestJS modules should isolate identity/access, characters, wizard progress, AI o
 
 ## Node.js runtime
 
-Use Node.js 24 LTS as the project runtime baseline for both the Next.js frontend and the NestJS backend. Pin the major version in repository and deployment configuration so local development, CI, and Vercel builds use the same runtime. The exact patch version, package manager, and lockfile strategy are `TBD`.
+Use Node.js 24 LTS as the project runtime baseline for both the Next.js frontend and the NestJS backend. Pin the major version in repository and deployment configuration so local development, CI, and Vercel builds use the same runtime. The backend foundation is isolated in `backend/`, while the frontend is isolated in `frontend/`; both packages use their own npm scripts and are intended to have their own lockfiles. The backend lockfile remains pending generation in a Node/npm-enabled environment.
 
 Next.js requires Node.js 20.9 or newer; Node.js 24 LTS is the approved conservative baseline. Do not upgrade to another major version without checking Next.js, NestJS, OpenAI SDK, MongoDB driver/ODM, and Vercel compatibility and recording the decision.
 
@@ -106,6 +106,20 @@ HTTP request
 ```
 
 Provider timeouts, retries, rate limits, usage accounting, malformed output, refusal, and outages must be translated at the adapter boundary. The application layer decides whether the operation can be retried or surfaced as a user-actionable failure.
+
+## ESLint quality step
+
+The backend must use ESLint to check NestJS and TypeScript code for correctness, maintainability, security-sensitive patterns, and violations of the Clean Architecture dependency direction. ESLint must complement, not replace, type checking, unit tests, integration tests, API contract tests, and security review.
+
+The backend ESLint setup must:
+
+- Lint application source, configuration, DTOs, adapters, tests, and NestJS module code that belongs to the backend.
+- Prevent or flag framework, MongoDB, OpenAI, HTTP, and environment concerns from leaking into domain and application layers where the selected rules can enforce that boundary. The exact rule or plugin is `TBD`.
+- Avoid rules that encourage logging secrets, provider responses containing sensitive content, private prompts, or environment values.
+- Validate async/error-handling patterns appropriate for NestJS and provider adapters without hiding failures.
+- Run as a documented local command and as a CI quality gate once CI is configured.
+
+The ESLint version, configuration format, TypeScript/NestJS plugins, shared-versus-separate configuration, file ignores, severity policy, auto-fix policy, and CI command are `TBD`. The setup step must resolve these decisions before changing the backend package manifest and must not add a formatter or unrelated dependency without approval.
 
 ### Testing consequences
 

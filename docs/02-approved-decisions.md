@@ -4,8 +4,8 @@ This file is the decision register. “Approved” means an agent may implement 
 
 | Area | Approved decision | Status / notes |
 |---|---|---|
-| Frontend | Next.js with SSR and Server Components, built on React and TypeScript, running on Node.js 24 LTS | Approved; exact rendering, caching, and build configuration are `TBD`. |
-| Backend | NestJS with TypeScript on Node.js 24 LTS | Approved; exact patch version and package manager are `TBD`. |
+| Frontend | Next.js with SSR and Server Components, built on React and TypeScript, running on Node.js 24 LTS | Approved; the frontend package is isolated in `frontend/` and uses npm with its own manifest and lockfile. |
+| Backend | NestJS with TypeScript on Node.js 24 LTS | Approved; backend is isolated in `backend/` with npm scripts and its own package manifest. The root `npm run install:all` command installs both application packages. Exact patch versions and backend lockfile regeneration remain pending environment validation. |
 | Database | MongoDB | Approved; hosting and ODM are `TBD`. |
 | AI | OpenAI | Approved; model IDs, quotas, and SDK version are `TBD`. |
 | Deployment | Vercel | Approved; environment topology is `TBD`. |
@@ -16,7 +16,9 @@ This file is the decision register. “Approved” means an agent may implement 
 | Auth | Authentication provider and session strategy | TBD. |
 | Access model | Guest generation and export; authentication required to save character/story data in MongoDB and resume it | Approved; guest retention, rate limits, and generated-asset persistence remain `TBD`. |
 | UI state | State-management library and form library | TBD. |
-| Frontend styling | SCSS | Approved; Sass package/version, module strategy, naming conventions, and global/local split are `TBD`. |
+| Frontend styling | SCSS | Approved; current foundation uses Sass `1.89.x`; module strategy, naming conventions, and global/local split remain `TBD`. |
+| Component documentation | Storybook | Approved; frontend foundation uses Storybook `9.1.x` with `@storybook/nextjs`; addons remain intentionally unconfigured until needed. |
+| Code quality | ESLint for frontend and backend TypeScript code | Approved; frontend foundation uses ESLint `9.39.x` flat config with Next.js, React, TypeScript, and Storybook rules. Backend configuration and shared-rule strategy remain `TBD` for Task 02. |
 | API | REST vs GraphQL, versioning, and error envelope | TBD; implementation tasks must not invent a final contract before approval. |
 | Files | Image storage/provider and retention | TBD. |
 | Moderation | Safety policy and review workflow | TBD; must be resolved before production AI launch. |
