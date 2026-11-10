@@ -2,6 +2,14 @@
 
 NestJS modules should isolate identity/access, characters, wizard progress, AI orchestration, D&D content, images, and health/operations. The backend uses TypeScript. Controllers define transport concerns; services enforce domain rules; repositories isolate MongoDB access; provider adapters isolate OpenAI and any future storage service.
 
+## Backend file-naming convention
+
+Backend source filenames must use lowercase kebab-case. Examples include `auth-service.ts`, `session-store-port.ts`, `mongo-db-connection.ts`, and `character-repository.ts`. DTOs and interfaces may use explicit suffixes such as `account-record.dto.ts` and `session-store-service.interface.ts`. Test files keep the same kebab-case base name and append the test suffix, such as `auth-service.spec.ts`.
+
+Use PascalCase for classes, interfaces, and types, camelCase for public functions, methods, variables, and object properties, and prefix private functions, methods, and variables with `_` (for example, `_client` or `_normalizeEmail`). NestJS framework-required filenames or generated files are exceptions when the framework requires a specific name, such as `main.ts`, `app.module.ts`, or `*.controller.ts`; those names must not be changed merely to satisfy the convention.
+
+This convention applies to new backend files. Renaming existing files is a separate refactoring task and must update all imports without changing unrelated behavior.
+
 ## Node.js runtime
 
 Use Node.js 24 LTS as the project runtime baseline for both the Next.js frontend and the NestJS backend. Pin the major version in repository and deployment configuration so local development, CI, and Vercel builds use the same runtime. The backend foundation is isolated in `backend/`, while the frontend is isolated in `frontend/`; both packages use their own npm scripts and are intended to have their own lockfiles. The backend lockfile remains pending generation in a Node/npm-enabled environment.
@@ -9,6 +17,49 @@ Use Node.js 24 LTS as the project runtime baseline for both the Next.js frontend
 Next.js requires Node.js 20.9 or newer; Node.js 24 LTS is the approved conservative baseline. Do not upgrade to another major version without checking Next.js, NestJS, OpenAI SDK, MongoDB driver/ODM, and Vercel compatibility and recording the decision.
 
 All inputs require schema validation. Persistence and account-owned resources require authorization and ownership checks; guest generation endpoints require abuse controls but do not require authentication. AI endpoints must use server-side configuration, bounded inputs, timeouts, retry rules, provider error mapping, usage accounting, and audit records. Exact libraries, queueing, rate-limit store, and observability integration are `TBD`.
+
+## Authentication and authorization
+
+Authentication is self-managed. The backend verifies credentials, creates and revokes server-side sessions, and resolves the current user from a Secure, HTTP-only, SameSite cookie. Session identifiers must be opaque and must not contain user data or credentials. Passwords must never be stored or logged; they must be processed with an approved memory-hard password-hashing algorithm. The exact algorithm parameters, cookie name/domain, session lifetime, rotation policy, revocation behavior, account recovery, email verification, and roles are `TBD`.
+
+Authentication infrastructure must expose an application-level current-user contract rather than leaking NestJS request objects, cookies, MongoDB documents, or hashing-library types into domain use cases. A reusable ownership policy must compare the authenticated subject with the resource owner before reads, updates, deletes, resume operations, image/token access, or downloads. Missing identity and failed ownership checks must be handled consistently without resource-existence leakage.
+
+The authentication module must be composed at the backend boundary and must not gate guest story, image, token, or download generation. Protected save/resume use cases require authenticated identity and ownership checks. API routes and error-envelope details remain `TBD` until the API contract is approved.
+
+NestJS interfaces do not exist at runtime, so constructor dependencies represented by interfaces must use explicit injection tokens. The auth module currently binds those tokens to in-memory account/session stores so the development application can start; these stores are temporary and non-persistent. They must be replaced by approved MongoDB persistence adapters before account data is used beyond local development.
+
+### NestJS dependency-injection pattern
+
+When an application service depends on an interface, the interface may be imported with `import type`, but it must not be used as the runtime NestJS token. Define a runtime token and inject it explicitly:
+
+```ts
+constructor(
+  @Inject("AUTH_ACCOUNT_STORE")
+  private readonly _accounts: IAccountStoreService,
+  @Inject("AUTH_SESSION_STORE")
+  private readonly _sessions: ISessionStoreService,
+  @Inject("AUTH_CRYPTO_SERVICE")
+  private readonly _cryptService: IAuthCryptService,
+  @Inject("AUTH_OPTIONS")
+  options: IAuthService,
+) {}
+```
+
+The corresponding NestJS module must register every token:
+
+```ts
+providers: [
+  { provide: "AUTH_ACCOUNT_STORE", useClass: AccountStoreService },
+  { provide: "AUTH_SESSION_STORE", useClass: SessionStoreService },
+  { provide: "AUTH_CRYPTO_SERVICE", useClass: AuthCryptoService },
+  { provide: "AUTH_OPTIONS", useValue: {} },
+  { provide: "AUTH_SERVICE", useClass: AuthService },
+]
+```
+
+Use exported constants instead of repeated string literals when the token is shared across multiple files. Injectable classes used in `useClass` or `useExisting` must use a normal runtime import in the module. Never use `import type` for a class that NestJS must instantiate.
+
+Application services should use NestJS decorators only at the composition boundary required by the module. Their business behavior must remain independent from MongoDB and provider implementations. Private properties, constructor parameters, and methods use an `_` prefix; public members retain normal camelCase.
 
 The backend must reject attempts to mutate approved fields through an AI response path unless a user action explicitly authorizes the change. Version conflicts should be handled deliberately; conflict UX is `TBD`.
 
@@ -51,35 +102,54 @@ Contains NestJS controllers, request/response DTOs, guards, presenters, mappers,
 
 Contains MongoDB repositories, OpenAI adapters, future image-storage adapters, configuration loading, logging, and other external-system integrations. Infrastructure may depend on inner layers and must translate external failures into application-level errors without leaking secrets or provider-specific internals.
 
-### Suggested module structure
+### Reference module architecture
 
-The following layout is a guide and may be adapted to the repository after the relevant task confirms conventions:
+Use the following structure as the reference for building backend feature modules. It is an example and does not claim that every feature or file already exists:
 
 ```text
 src/
-├── domain/
-│   ├── character/
-│   ├── wizard/
-│   ├── ai/
-│   └── shared/
-├── application/
-│   ├── ports/
-│   └── use-cases/
-├── adapters/
-│   ├── http/
-│   ├── presenters/
-│   └── mappers/
-├── infrastructure/
-│   ├── persistence/
-│   ├── openai/
-│   ├── images/
-│   └── configuration/
-└── main/
-    ├── modules/
-    └── composition-root/
+├── app.module.ts
+├── main.ts
+├── modules/
+│   ├── auth/
+│   │   ├── application/
+│   │   │   ├── auth.module.ts
+│   │   │   ├── services/
+│   │   │   ├── use-cases/
+│   │   │   └── ports/
+│   │   ├── domain/
+│   │   │   ├── entities/
+│   │   │   ├── dtos/
+│   │   │   ├── value-objects/
+│   │   │   └── rules/
+│   │   ├── adapters/
+│   │   │   └── http/
+│   │   └── infrastructure/
+│   │       └── persistence/
+│   └── health/
+│       ├── application/
+│       ├── adapters/
+│       └── health.module.ts
+└── shared/
+    ├── application/
+    │   └── mongo-db.module.ts
+    ├── domain/
+    │   └── dtos/
+    │       └── error.dto.ts
+    └── infrastructure/
+        └── database/
+            ├── mongo-db-config.ts
+            ├── mongo-db-connection.ts
+            └── *.spec.ts
 ```
 
-NestJS feature modules may group files differently, provided that module boundaries preserve the dependency rule. A concrete folder convention, ODM, and dependency-injection token strategy are `TBD` until approved.
+`modules/<feature>` is the feature boundary. Each feature combines NestJS module composition with Clean Architecture layers. Application services and use cases coordinate ports, domain code contains business rules, adapters handle HTTP and other input/output concerns, and infrastructure implements external-system details. Domain and application code must remain independent of NestJS and external providers.
+
+`shared` is reserved for genuinely cross-cutting code reused by multiple features. Its subfolders identify the architectural responsibility; `shared` is not an additional Clean Architecture layer and must not become a general-purpose dumping ground.
+
+For example, a shared MongoDB integration may expose a NestJS composition module from `shared/application/mongo-db.module.ts`, while driver-specific connection and configuration remain under `shared/infrastructure/database/`. It must not be imported by domain DTOs or interfaces. Feature-specific account/session persistence adapters belong under the relevant feature's infrastructure boundary.
+
+`app.module.ts` is the application composition root. It imports feature modules such as the auth and health modules. `main.ts` is the NestJS bootstrap entry point. NestJS-required filenames such as `*.module.ts`, `*.controller.ts`, `main.ts`, and `app.module.ts` are exceptions to the general backend filename convention.
 
 ### Backend boundary rules
 
@@ -90,6 +160,8 @@ NestJS feature modules may group files differently, provided that module boundar
 - AI responses are suggestions until a user-authorized use case changes the character aggregate.
 - Approved character fields, drafts, rejected suggestions, and generated-image source revisions must remain distinct in application contracts.
 - Authorization and ownership checks must run before reading or mutating user-owned data. Guest generation must not create user-owned database records.
+- Cookie parsing, session lookup, and credential verification remain in interface-adapter/infrastructure code; application use cases receive an optional current-user value or an explicit authorization failure.
+- Session cookies must use Secure, HTTP-only, and an appropriate SameSite policy in deployed environments. Authentication failures must not log cookies, passwords, raw session identifiers, or provider/database payloads.
 - Audit events must record user-authorized AI actions and relevant source revisions without storing secrets or unnecessary sensitive content.
 
 ### Request and provider flow

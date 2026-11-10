@@ -1,5 +1,5 @@
 import { HealthController } from "./health.controller";
-import { HealthService } from "./health.service";
+import { HealthService } from "./services/health.service";
 
 describe("HealthController", () => {
   it("returns a stable health response without environment values", () => {

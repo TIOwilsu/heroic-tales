@@ -7,18 +7,28 @@ The TypeScript-based Next.js frontend uses SSR/Server Components where appropria
 ```text
 Next.js frontend -> NestJS API -> MongoDB
                          -> OpenAI
-                         -> TBD: image/token storage / moderation / auth provider
+                         -> TBD: image/token storage / moderation
 ```
 
 The client never calls OpenAI directly and never receives provider credentials. Domain modules should separate character data, AI orchestration, D&D content, authentication, and image workflows.
 
 The repository uses separate application packages: `frontend/` contains the Next.js application and `backend/` contains the NestJS API. The repository root contains shared documentation and orchestration. The root `dev:all` command starts both development servers without adding a process-manager dependency.
 
+The backend should organize feature code under `backend/src/modules/` and cross-cutting code under `backend/src/shared/`. Each feature module should apply the documented Clean Architecture boundaries. The example structure is a guide for future modules, not an inventory of implemented features. The backend composition root is `backend/src/app.module.ts`, and the NestJS bootstrap is `backend/src/main.ts`.
+
 Dependency setup is also orchestrated from the repository root. `npm run install:all` installs dependencies in `frontend/` and `backend/` sequentially; it does not merge their manifests or lockfiles. Use package-level `npm --prefix <package> install` only when intentionally installing one package.
 
 Frontend and backend implementations must preserve Clean Architecture dependency direction: domain rules and application use cases remain independent from React, NestJS, MongoDB, OpenAI, HTTP, and browser concerns. Public D&D API access belongs behind a server-side infrastructure adapter and must return provenance-aware, edition-scoped data through the backend's internal contract.
 
 Character images and board-ready tokens are separate application workflows. Both must be traceable to an approved character revision; a token must not be treated as a generic crop of an unapproved or rejected image unless that behavior is explicitly approved later.
+
+## Authentication boundary
+
+Heroic Tales uses self-managed authentication for account-owned persistence. The NestJS backend owns credential verification and session lifecycle; the Next.js frontend must not receive passwords, session storage secrets, or database credentials. Successful authentication establishes a server-side session identified to the browser through a Secure, HTTP-only, SameSite cookie. The browser sends the cookie automatically to protected backend requests, and backend guards resolve the current user before any account-owned read or mutation.
+
+Guest story, image, token, and download workflows remain available without authentication, subject to abuse controls. Saving a character or resuming account-owned data requires an authenticated session and an ownership check. A missing, invalid, expired, or revoked session must produce an unauthenticated result without revealing whether another account owns the requested resource.
+
+The exact API contract, cookie name and domain, session store/indexes, password policy, account recovery, session duration, rotation, revocation, email verification, and roles are `TBD`. These decisions must be resolved before production authentication is enabled.
 
 ## Data flow rules
 

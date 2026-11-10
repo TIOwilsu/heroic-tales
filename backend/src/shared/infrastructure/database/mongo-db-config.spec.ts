@@ -1,7 +1,7 @@
 import {
   loadMongoConnectionConfig,
   MongoConfigurationError,
-} from "./mongodb.config";
+} from "./mongo-db-config";
 
 describe("loadMongoConnectionConfig", () => {
   it("loads the URI and database name without changing them", () => {

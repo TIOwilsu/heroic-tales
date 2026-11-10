@@ -26,7 +26,7 @@ MongoDB foundation and documented unresolved decisions.
 - [x] Prerequisites read
 - [x] Connection scope verified
 - [x] No domain schema added
-- [ ] Dependencies installed and lockfile regenerated
-- [ ] Tests run
+- [x] Dependencies installed and lockfile regenerated
+- [x] Tests run
 - [x] Summary/issues recorded; runtime validation is pending a shell with Node/npm and a configured MongoDB instance
 - [x] Stop; do not start Task 04

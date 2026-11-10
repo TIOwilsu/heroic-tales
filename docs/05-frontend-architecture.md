@@ -122,3 +122,10 @@ The frontend ESLint setup must:
 - Run as a documented local command and as a CI quality gate once CI is configured.
 
 The frontend foundation uses ESLint `9.39.x` with flat configuration in `eslint.config.mjs`. It covers Next.js, React, TypeScript, and Storybook files through the configured plugins and runs with `npm run lint`. The auto-fix policy, CI enforcement, and whether rules are shared with the backend remain `TBD`; this step does not configure backend linting.
+## Frontend file-naming convention
+
+Frontend source filenames must use PascalCase. Examples include `CharacterWizard.tsx`, `StoryEditor.tsx`, `UseCharacterDraft.ts`, and `CharacterApi.ts`. Test files keep the same PascalCase base name and append the test suffix, such as `CharacterWizard.spec.tsx`.
+
+Use PascalCase for React component and class symbols, camelCase for functions, hooks, variables, and object properties, and explicit descriptive names for types and interfaces. Next.js reserved route filenames such as `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, and `route.ts` are required framework exceptions and must retain their prescribed names.
+
+This convention applies to new frontend files. Renaming existing files is a separate refactoring task and must update all imports without changing unrelated behavior.

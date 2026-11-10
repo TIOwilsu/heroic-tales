@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { MongoDbConnection } from "./mongodb.connection";
-import { loadMongoConnectionConfig } from "./mongodb.config";
+import { MongoDbConnection } from "../infrastructure/database/mongo-db-connection";
+import { loadMongoConnectionConfig } from "../infrastructure/database/mongo-db-config";
 
 export const MONGODB_CONNECTION = Symbol("MONGODB_CONNECTION");
 

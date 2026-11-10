@@ -4,7 +4,7 @@ MongoDB is the approved database. The initial conceptual collections are `users`
 
 ## Connectivity foundation
 
-Task 03 establishes a small infrastructure boundary using the native MongoDB Node.js driver. This is a connectivity adapter, not a decision to use an ODM and not a domain persistence implementation. The adapter reads `MONGODB_URI` and `MONGODB_DATABASE` from backend environment variables, supports an explicit `connect`/`ping`/`close` lifecycle, and must not log connection strings. The Nest module is not imported into the application module until a future task defines startup behavior and runtime availability requirements.
+Task 03 establishes a small infrastructure boundary using the native MongoDB Node.js driver. This is a connectivity adapter, not a decision to use an ODM and not a domain persistence implementation. The adapter reads `MONGODB_URI` and `MONGODB_DATABASE` from backend environment variables, supports an explicit `connect`/`ping`/`close` lifecycle, and must not log connection strings. The current NestJS composition module is `backend/src/shared/application/mongo-db.module.ts`; it should be wired into the application composition root only when runtime startup behavior and availability requirements are approved.
 
 No collections, indexes, repositories, migrations, seed data, or domain schemas are created by this foundation. The ODM decision remains `TBD` and requires explicit approval before persistence work begins.
 

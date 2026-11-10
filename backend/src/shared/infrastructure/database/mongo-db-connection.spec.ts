@@ -1,4 +1,4 @@
-import { MongoDbConnection, type MongoClientLike } from "./mongodb.connection";
+import { MongoDbConnection, type MongoClientLike } from "./mongo-db-connection";
 
 describe("MongoDbConnection", () => {
   it("connects to the configured database and verifies it with ping", async () => {
