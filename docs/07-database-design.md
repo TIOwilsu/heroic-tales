@@ -2,6 +2,12 @@
 
 MongoDB is the approved database. The initial conceptual collections are `users` (or external identity references), `characters`, `character_revisions`, `ai_suggestions`, `image_requests`, `character_tokens`, and `audit_events`. Exact collection names, indexes, shard/replica strategy, and ODM are `TBD`.
 
+## Connectivity foundation
+
+Task 03 establishes a small infrastructure boundary using the native MongoDB Node.js driver. This is a connectivity adapter, not a decision to use an ODM and not a domain persistence implementation. The adapter reads `MONGODB_URI` and `MONGODB_DATABASE` from backend environment variables, supports an explicit `connect`/`ping`/`close` lifecycle, and must not log connection strings. The Nest module is not imported into the application module until a future task defines startup behavior and runtime availability requirements.
+
+No collections, indexes, repositories, migrations, seed data, or domain schemas are created by this foundation. The ODM decision remains `TBD` and requires explicit approval before persistence work begins.
+
 Character records should include owner identity, title, selected edition, wizard stage, draft fields, approved fields, completion/approval status, timestamps, and schema version. Edition-specific mechanical fields must be namespaced or separated so 2014 data cannot be read as 2024 data.
 
 Persist immutable or append-only revision metadata for accepted user decisions and AI actions. Do not store raw secrets. Retention, deletion/export behavior, and encrypted-field strategy are `TBD` and must be resolved before production data is collected.

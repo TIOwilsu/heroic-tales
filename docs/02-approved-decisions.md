@@ -6,7 +6,7 @@ This file is the decision register. “Approved” means an agent may implement 
 |---|---|---|
 | Frontend | Next.js with SSR and Server Components, built on React and TypeScript, running on Node.js 24 LTS | Approved; the frontend package is isolated in `frontend/` and uses npm with its own manifest and lockfile. |
 | Backend | NestJS with TypeScript on Node.js 24 LTS | Approved; backend is isolated in `backend/` with npm scripts and its own package manifest. The root `npm run install:all` command installs both application packages. Exact patch versions and backend lockfile regeneration remain pending environment validation. |
-| Database | MongoDB | Approved; hosting and ODM are `TBD`. |
+| Database | MongoDB | Approved; the native MongoDB Node.js driver is approved for the Task 03 connectivity boundary only. Hosting and ODM remain `TBD`. |
 | AI | OpenAI | Approved; model IDs, quotas, and SDK version are `TBD`. |
 | Deployment | Vercel | Approved; environment topology is `TBD`. |
 | Brand | Heroic Tales; “Every Hero Has a Story” | Approved. |

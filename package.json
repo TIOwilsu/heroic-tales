@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "install:frontend": "npm --prefix frontend install",
+    "install:backend": "npm --prefix backend install",
     "install:all": "node scripts/install-all.mjs",
+    "test:frontend": "npm --prefix frontend run typecheck && npm --prefix frontend run lint",
+    "test:backend": "npm --prefix backend run test",
+    "test:all": "npm run test:frontend && npm run test:backend",
     "dev:all": "node scripts/dev-all.mjs",
     "dev:frontend": "npm --prefix frontend run dev",
     "dev:backend": "npm --prefix backend run start:dev"
