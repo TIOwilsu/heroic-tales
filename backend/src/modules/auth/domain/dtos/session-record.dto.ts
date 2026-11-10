@@ -1,5 +1,7 @@
 export interface SessionRecordDTO {
-  readonly tokenDigest: string;
+  readonly accessTokenDigest: string;
+  readonly refreshTokenDigest: string;
   readonly userId: string;
-  readonly expiresAt: Date;
+  readonly accessTokenExpiresAt: Date;
+  readonly refreshTokenExpiresAt: Date;
 }

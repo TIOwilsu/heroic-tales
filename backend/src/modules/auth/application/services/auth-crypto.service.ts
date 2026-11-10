@@ -84,11 +84,15 @@ export class AuthCryptoService {
     );
   }
 
-  public createSessionToken(): string {
+  public createAccessToken(): string {
     return randomBytes(32).toString("base64url");
   }
 
-  public digestSessionToken(sessionToken: string): string {
-    return createHash("sha256").update(sessionToken).digest("base64url");
+  public createRefreshToken(): string {
+    return randomBytes(48).toString("base64url");
+  }
+
+  public digestToken(token: string): string {
+    return createHash("sha256").update(token).digest("base64url");
   }
 }

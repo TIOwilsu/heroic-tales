@@ -4,19 +4,39 @@ import type { ISessionStoreService } from "../../domain/interfaces/session-store
 
 @Injectable()
 export class SessionStoreService implements ISessionStoreService {
-  private readonly _records = new Map<string, SessionRecordDTO>();
+  private readonly _accessRecords = new Map<string, SessionRecordDTO>();
+  private readonly _refreshRecords = new Map<string, SessionRecordDTO>();
 
   public async create(session: SessionRecordDTO): Promise<void> {
-    this._records.set(session.tokenDigest, session);
+    this._accessRecords.set(session.accessTokenDigest, session);
+    this._refreshRecords.set(session.refreshTokenDigest, session);
   }
 
-  public async findByTokenDigest(
-    tokenDigest: string,
+  public async findByAccessTokenDigest(
+    accessTokenDigest: string,
   ): Promise<SessionRecordDTO | undefined> {
-    return this._records.get(tokenDigest);
+    return this._accessRecords.get(accessTokenDigest);
   }
 
-  public async deleteByTokenDigest(tokenDigest: string): Promise<void> {
-    this._records.delete(tokenDigest);
+  public async findByRefreshTokenDigest(
+    refreshTokenDigest: string,
+  ): Promise<SessionRecordDTO | undefined> {
+    return this._refreshRecords.get(refreshTokenDigest);
+  }
+
+  public async deleteByAccessTokenDigest(accessTokenDigest: string): Promise<void> {
+    const session = this._accessRecords.get(accessTokenDigest);
+    if (session) {
+      this._accessRecords.delete(session.accessTokenDigest);
+      this._refreshRecords.delete(session.refreshTokenDigest);
+    }
+  }
+
+  public async deleteByRefreshTokenDigest(refreshTokenDigest: string): Promise<void> {
+    const session = this._refreshRecords.get(refreshTokenDigest);
+    if (session) {
+      this._refreshRecords.delete(session.refreshTokenDigest);
+      this._accessRecords.delete(session.accessTokenDigest);
+    }
   }
 }

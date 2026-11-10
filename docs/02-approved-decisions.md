@@ -13,7 +13,7 @@ This file is the decision register. “Approved” means an agent may implement 
 | Logo | Exact user-provided H/T intertwined serif monogram | Approved; source asset/location is `TBD`. |
 | Editions | D&D 5e 2014 and Revised 5e 2024, stored and handled separately | Approved. |
 | Content | Official mechanical content only; narrative originality allowed within canon constraints | Approved. |
-| Auth | Self-managed authentication with secure server-side HTTP-only cookie sessions | Approved; account recovery, roles, password policy, session persistence details, rotation, and revocation rules remain `TBD` and must be resolved within Task 04 before production use. |
+| Auth | Self-managed authentication using bearer access tokens and refresh tokens | Approved; token format/signing, lifetimes, refresh-token storage, rotation, revocation, account recovery, roles, password policy, and client-side persistence remain `TBD` and must be resolved within Task 04 before production use. |
 | Access model | Guest generation and export; authentication required to save character/story data in MongoDB and resume it | Approved; guest retention, rate limits, and generated-asset persistence remain `TBD`. |
 | UI state | State-management library and form library | TBD. |
 | Frontend styling | SCSS | Approved; current foundation uses Sass `1.89.x`; module strategy, naming conventions, and global/local split remain `TBD`. |

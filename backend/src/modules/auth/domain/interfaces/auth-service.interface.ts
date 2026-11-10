@@ -1,4 +1,5 @@
 export interface IAuthService {
-  readonly sessionDurationMs?: number;
+  readonly accessTokenDurationMs?: number;
+  readonly refreshTokenDurationMs?: number;
   readonly createUserId?: () => string;
 }

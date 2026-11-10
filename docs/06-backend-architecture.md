@@ -20,13 +20,15 @@ All inputs require schema validation. Persistence and account-owned resources re
 
 ## Authentication and authorization
 
-Authentication is self-managed. The backend verifies credentials, creates and revokes server-side sessions, and resolves the current user from a Secure, HTTP-only, SameSite cookie. Session identifiers must be opaque and must not contain user data or credentials. Passwords must never be stored or logged; they must be processed with an approved memory-hard password-hashing algorithm. The exact algorithm parameters, cookie name/domain, session lifetime, rotation policy, revocation behavior, account recovery, email verification, and roles are `TBD`.
+Authentication is self-managed. The backend verifies credentials, issues short-lived access tokens and refresh tokens, validates bearer access tokens, and controls refresh-token rotation and revocation. Protected requests use the `Authorization: Bearer <access-token>` header. Passwords must never be stored or logged; they must be processed with an approved memory-hard password-hashing algorithm. The token format, claims, signing algorithm and key management, token lifetimes, refresh-token persistence, rotation policy, reuse detection, revocation behavior, account recovery, email verification, and roles are `TBD`.
 
-Authentication infrastructure must expose an application-level current-user contract rather than leaking NestJS request objects, cookies, MongoDB documents, or hashing-library types into domain use cases. A reusable ownership policy must compare the authenticated subject with the resource owner before reads, updates, deletes, resume operations, image/token access, or downloads. Missing identity and failed ownership checks must be handled consistently without resource-existence leakage.
+Authentication infrastructure must expose an application-level current-user contract rather than leaking NestJS request objects, HTTP headers, bearer-token libraries, MongoDB documents, or hashing-library types into domain use cases. A reusable ownership policy must compare the authenticated subject with the resource owner before reads, updates, deletes, resume operations, image/token access, or downloads. Missing, expired, invalid, or revoked identity and failed ownership checks must be handled consistently without resource-existence leakage.
 
 The authentication module must be composed at the backend boundary and must not gate guest story, image, token, or download generation. Protected save/resume use cases require authenticated identity and ownership checks. API routes and error-envelope details remain `TBD` until the API contract is approved.
 
-NestJS interfaces do not exist at runtime, so constructor dependencies represented by interfaces must use explicit injection tokens. The auth module currently binds those tokens to in-memory account/session stores so the development application can start; these stores are temporary and non-persistent. They must be replaced by approved MongoDB persistence adapters before account data is used beyond local development.
+The Task 04 foundation uses opaque, cryptographically random bearer values: a short-lived access token for protected requests and a longer-lived refresh token for replacement access tokens. Only token digests are held by the session-store boundary; the raw values are returned to the caller and must never be logged. Refresh replaces the prior token pair, so a previously used refresh token is no longer valid. This is an implementation baseline, not a final decision about JWT versus another signed or opaque format; production lifetimes, storage, key management, reuse detection, and HTTP routes remain `TBD`.
+
+NestJS interfaces do not exist at runtime, so constructor dependencies represented by interfaces must use explicit injection tokens. The auth module currently binds those tokens to in-memory account/session stores so the development application can start; these stores are temporary and non-persistent. They must be replaced by approved MongoDB persistence adapters before account data or refresh-token state is used beyond local development.
 
 ### NestJS dependency-injection pattern
 
@@ -160,8 +162,8 @@ For example, a shared MongoDB integration may expose a NestJS composition module
 - AI responses are suggestions until a user-authorized use case changes the character aggregate.
 - Approved character fields, drafts, rejected suggestions, and generated-image source revisions must remain distinct in application contracts.
 - Authorization and ownership checks must run before reading or mutating user-owned data. Guest generation must not create user-owned database records.
-- Cookie parsing, session lookup, and credential verification remain in interface-adapter/infrastructure code; application use cases receive an optional current-user value or an explicit authorization failure.
-- Session cookies must use Secure, HTTP-only, and an appropriate SameSite policy in deployed environments. Authentication failures must not log cookies, passwords, raw session identifiers, or provider/database payloads.
+- Authorization-header parsing, token validation, refresh-token lookup, and credential verification remain in interface-adapter/infrastructure code; application use cases receive an optional current-user value or an explicit authorization failure.
+- Authentication failures must not log access tokens, refresh tokens, authorization headers, passwords, signing keys, or provider/database payloads.
 - Audit events must record user-authorized AI actions and relevant source revisions without storing secrets or unnecessary sensitive content.
 
 ### Request and provider flow

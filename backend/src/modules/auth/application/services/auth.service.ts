@@ -11,11 +11,13 @@ import type { AuthenticatedUserDTO } from "../../domain/dtos/authenticated-user.
 import type { CredentialsDTO } from "../../domain/dtos/credentials.dto";
 import type { SessionRecordDTO } from "../../domain/dtos/session-record.dto";
 
-const DEFAULT_SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 7;
+const DEFAULT_ACCESS_TOKEN_DURATION_MS = 1000 * 60 * 15;
+const DEFAULT_REFRESH_TOKEN_DURATION_MS = 1000 * 60 * 60 * 24 * 7;
 
 @Injectable()
 export class AuthService {
-  private readonly _sessionDurationMs: number;
+  private readonly _accessTokenDurationMs: number;
+  private readonly _refreshTokenDurationMs: number;
   private readonly _createUserId: () => string;
 
   constructor(
@@ -24,8 +26,10 @@ export class AuthService {
     @Inject('AUTH_CRYPTO_SERVICE') private readonly _cryptService: IAuthCryptService,
     @Inject('AUTH_OPTIONS') options: IAuthService,
   ) {
-    this._sessionDurationMs =
-      options.sessionDurationMs ?? DEFAULT_SESSION_DURATION_MS;
+    this._accessTokenDurationMs =
+      options.accessTokenDurationMs ?? DEFAULT_ACCESS_TOKEN_DURATION_MS;
+    this._refreshTokenDurationMs =
+      options.refreshTokenDurationMs ?? DEFAULT_REFRESH_TOKEN_DURATION_MS;
     this._createUserId = options.createUserId ?? randomUUID;
   }
 
@@ -62,32 +66,79 @@ export class AuthService {
       throw new ErrorDTO("Invalid credentials.", "AUTH_INVALID_CREDENTIALS");
     }
 
-    const sessionToken = this._cryptService.createSessionToken();
-    const expiresAt = new Date(Date.now() + this._sessionDurationMs);
+    const accessToken = this._cryptService.createAccessToken();
+    const refreshToken = this._cryptService.createRefreshToken();
+    const accessTokenExpiresAt = new Date(
+      Date.now() + this._accessTokenDurationMs,
+    );
+    const refreshTokenExpiresAt = new Date(
+      Date.now() + this._refreshTokenDurationMs,
+    );
     const session: SessionRecordDTO = {
-      tokenDigest: this._cryptService.digestSessionToken(sessionToken),
+      accessTokenDigest: this._cryptService.digestToken(accessToken),
+      refreshTokenDigest: this._cryptService.digestToken(refreshToken),
       userId: account.id,
-      expiresAt,
+      accessTokenExpiresAt,
+      refreshTokenExpiresAt,
     };
 
     await this._sessions.create(session);
-    return { user: this._toAuthenticatedUser(account), sessionToken, expiresAt };
+    return {
+      user: this._toAuthenticatedUser(account),
+      accessToken,
+      refreshToken,
+      accessTokenExpiresAt,
+      refreshTokenExpiresAt,
+    };
   }
 
-  public async resolveUser(sessionToken: string | undefined): Promise<AuthenticatedUserDTO | undefined> {
-    if (!sessionToken) {
+  public async refresh(
+    refreshToken: string | undefined,
+  ): Promise<AuthenticatedSessionDTO | undefined> {
+    if (!refreshToken) {
       return undefined;
     }
 
-    const session = await this._sessions.findByTokenDigest(
-      this._cryptService.digestSessionToken(sessionToken),
+    const refreshTokenDigest = this._cryptService.digestToken(refreshToken);
+    const session = await this._sessions.findByRefreshTokenDigest(
+      refreshTokenDigest,
     );
     if (!session) {
       return undefined;
     }
 
-    if (session.expiresAt.getTime() <= Date.now()) {
-      await this._sessions.deleteByTokenDigest(session.tokenDigest);
+    if (session.refreshTokenExpiresAt.getTime() <= Date.now()) {
+      await this._sessions.deleteByRefreshTokenDigest(refreshTokenDigest);
+      return undefined;
+    }
+
+    const account = await this._accounts.findById(session.userId);
+    if (!account) {
+      await this._sessions.deleteByRefreshTokenDigest(refreshTokenDigest);
+      return undefined;
+    }
+
+    await this._sessions.deleteByRefreshTokenDigest(refreshTokenDigest);
+    return this._issueSession(account);
+  }
+
+  public async resolveUser(
+    accessToken: string | undefined,
+  ): Promise<AuthenticatedUserDTO | undefined> {
+    if (!accessToken) {
+      return undefined;
+    }
+
+    const accessTokenDigest = this._cryptService.digestToken(accessToken);
+    const session = await this._sessions.findByAccessTokenDigest(
+      accessTokenDigest,
+    );
+    if (!session) {
+      return undefined;
+    }
+
+    if (session.accessTokenExpiresAt.getTime() <= Date.now()) {
+      await this._sessions.deleteByAccessTokenDigest(accessTokenDigest);
       return undefined;
     }
 
@@ -95,10 +146,41 @@ export class AuthService {
     return account ? this._toAuthenticatedUser(account) : undefined;
   }
 
-  public async revoke(sessionToken: string | undefined): Promise<void> {
-    if (sessionToken) {
-      await this._sessions.deleteByTokenDigest(this._cryptService.digestSessionToken(sessionToken));
+  public async revoke(refreshToken: string | undefined): Promise<void> {
+    if (refreshToken) {
+      await this._sessions.deleteByRefreshTokenDigest(
+        this._cryptService.digestToken(refreshToken),
+      );
     }
+  }
+
+  private async _issueSession(
+    account: AccountRecordDTO,
+  ): Promise<AuthenticatedSessionDTO> {
+    const accessToken = this._cryptService.createAccessToken();
+    const refreshToken = this._cryptService.createRefreshToken();
+    const accessTokenExpiresAt = new Date(
+      Date.now() + this._accessTokenDurationMs,
+    );
+    const refreshTokenExpiresAt = new Date(
+      Date.now() + this._refreshTokenDurationMs,
+    );
+
+    await this._sessions.create({
+      accessTokenDigest: this._cryptService.digestToken(accessToken),
+      refreshTokenDigest: this._cryptService.digestToken(refreshToken),
+      userId: account.id,
+      accessTokenExpiresAt,
+      refreshTokenExpiresAt,
+    });
+
+    return {
+      user: this._toAuthenticatedUser(account),
+      accessToken,
+      refreshToken,
+      accessTokenExpiresAt,
+      refreshTokenExpiresAt,
+    };
   }
 
   private _normalizeEmail(email: string): string {
