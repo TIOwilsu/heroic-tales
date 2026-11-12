@@ -2,7 +2,7 @@
 
 ## Logical boundary
 
-The TypeScript-based Next.js frontend uses SSR/Server Components where appropriate and communicates with a TypeScript-based NestJS API. The API owns optional authentication integration, authorization for protected persistence, validation, guest and authenticated character workflows, OpenAI calls, D&D content classification, persistence, and audit events. MongoDB stores authenticated user-owned character documents and revisions. Vercel hosts deployable web/API surfaces subject to platform limits.
+The TypeScript-based Next.js frontend uses SSR/Server Components where appropriate and communicates with a TypeScript-based NestJS API. The API owns optional authentication integration, authorization for protected persistence, validation, guest and authenticated character workflows, OpenAI calls, D&D content classification, persistence, and audit events. MongoDB with Mongoose infrastructure adapters stores authenticated user-owned character documents and revisions. Vercel hosts deployable web/API surfaces subject to platform limits.
 
 ```text
 Next.js frontend -> NestJS API -> MongoDB
@@ -24,13 +24,13 @@ Character images and board-ready tokens are separate application workflows. Both
 
 ## Authentication boundary
 
-Heroic Tales uses self-managed authentication for account-owned persistence. The NestJS backend owns credential verification and token lifecycle; the Next.js frontend must not receive passwords, signing secrets, refresh-token storage secrets, or database credentials. Successful authentication returns a short-lived access token and a longer-lived refresh token. Protected API requests send the access token through the `Authorization: Bearer <access-token>` header, and backend guards resolve the current user before any account-owned read or mutation.
+Heroic Tales uses self-managed authentication for account-owned persistence. The NestJS backend owns credential verification, token creation, and token validation; the Next.js frontend must not receive passwords, signing secrets, refresh-token signing secrets, or database credentials. Successful authentication returns a short-lived access token and a longer-lived refresh token. The client stores both issued tokens and sends the access token through the `Authorization: Bearer <access-token>` header. Backend guards validate the token and resolve the current user before any account-owned read or mutation. The backend does not persist access tokens, refresh tokens, or token digests.
 
-When the access token expires, the client uses the refresh token with the backend token-refresh operation to obtain a new access token. Refresh-token rotation, reuse detection, revocation, logout behavior, token format, signing algorithm, token lifetimes, and the exact refresh endpoint are `TBD`. Refresh tokens must not be placed in URLs or logged. Browser storage and client persistence strategy are also `TBD`; implementation must not default to insecure persistent storage without an explicit security decision.
+When the access token expires, the client uses the refresh token with the backend token-refresh operation to obtain a new access token. Tokens must be self-contained and verifiable by the backend without a token store. Refresh-token rotation, reuse detection, revocation, logout behavior, token format, signing algorithm, token lifetimes, and the exact refresh endpoint are `TBD`. Refresh tokens must not be placed in URLs or logged. The client storage mechanism and persistence lifetime are `TBD` and require an explicit security decision; implementation must protect tokens against XSS and unintended exposure.
 
 Guest story, image, token, and download workflows remain available without authentication, subject to abuse controls. Saving a character or resuming account-owned data requires an authenticated access token and an ownership check. A missing, invalid, expired, or revoked token must produce an unauthenticated result without revealing whether another account owns the requested resource.
 
-The exact API contract, token claims, signing-key management, token store/indexes, password policy, account recovery, access/refresh lifetimes, rotation, revocation, email verification, roles, and browser storage strategy are `TBD`. These decisions must be resolved before production authentication is enabled.
+The exact API contract, token claims, signing-key management, password policy, account recovery, access/refresh lifetimes, rotation, revocation, email verification, roles, and browser storage strategy are `TBD`. A backend token store or token indexes are not planned. These decisions must be resolved before production authentication is enabled.
 
 ## Data flow rules
 

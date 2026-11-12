@@ -34,6 +34,14 @@ export class MongoDbConnection {
     return true;
   }
 
+  getDatabase(): Db {
+    if (!this._database) {
+      throw new Error("MongoDB connection must be established before use.");
+    }
+
+    return this._database;
+  }
+
   async close(): Promise<void> {
     if (!this._client) {
       return;

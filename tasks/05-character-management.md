@@ -23,8 +23,14 @@ CRUD, authorization, revision, edition isolation, and failure-retry tests.
 ## Expected deliverables
 Character management implementation and tests.
 ## Completion checklist
-- [ ] Prerequisites and decisions reviewed
-- [ ] Existing models inspected
-- [ ] Acceptance tests pass
-- [ ] Files/issues reported
-- [ ] Stop; do not start Task 06
+- [x] Prerequisites and decisions reviewed
+- [x] Existing models inspected
+- [x] Character domain contracts and ownership boundary implemented
+- [x] Draft create/list/read/update/archive behavior implemented
+- [x] Immutable character revision metadata implemented
+- [x] Edition separation enforced for 2014 and 2024 character records
+- [x] MongoDB repository adapters added behind application ports
+- [x] Focused authorization, CRUD, revision, and owner-isolation tests added
+- [ ] Execute the focused tests in a Node/npm-enabled environment
+- [x] Files/issues reported
+- [x] Stop; do not start Task 06

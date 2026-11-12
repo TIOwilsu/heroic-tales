@@ -1,6 +1,6 @@
 # 06 — Backend architecture
 
-NestJS modules should isolate identity/access, characters, wizard progress, AI orchestration, D&D content, images, and health/operations. The backend uses TypeScript. Controllers define transport concerns; services enforce domain rules; repositories isolate MongoDB access; provider adapters isolate OpenAI and any future storage service.
+NestJS modules should isolate identity/access, characters, wizard progress, AI orchestration, D&D content, images, and health/operations. The backend uses TypeScript. Controllers define transport concerns; services enforce domain rules; repositories isolate MongoDB access; provider adapters isolate OpenAI and any future storage service. Mongoose is the approved MongoDB ODM and must remain inside infrastructure persistence adapters.
 
 ## Backend file-naming convention
 
@@ -14,21 +14,27 @@ This convention applies to new backend files. Renaming existing files is a separ
 
 Use Node.js 24 LTS as the project runtime baseline for both the Next.js frontend and the NestJS backend. Pin the major version in repository and deployment configuration so local development, CI, and Vercel builds use the same runtime. The backend foundation is isolated in `backend/`, while the frontend is isolated in `frontend/`; both packages use their own npm scripts and are intended to have their own lockfiles. The backend lockfile remains pending generation in a Node/npm-enabled environment.
 
+## MongoDB persistence
+
+Mongoose is the approved object-document mapper for MongoDB persistence. It may be used by infrastructure repositories and NestJS persistence modules through `@nestjs/mongoose` and `mongoose`. Domain entities, application use cases, and repository interfaces must not import Mongoose schemas, models, `HydratedDocument`, `ObjectId`, or MongoDB driver types.
+
+The application layer depends on ports such as `ICharacterRepository` and `ICharacterRevisionRepository`. The infrastructure layer implements those ports with Mongoose models and maps persistence documents to domain DTOs. Schema definitions, indexes, connection configuration, and Mongoose lifecycle details remain infrastructure concerns. The native MongoDB driver connection from Task 03 remains a connectivity foundation and must not leak into application contracts.
+
 Next.js requires Node.js 20.9 or newer; Node.js 24 LTS is the approved conservative baseline. Do not upgrade to another major version without checking Next.js, NestJS, OpenAI SDK, MongoDB driver/ODM, and Vercel compatibility and recording the decision.
 
 All inputs require schema validation. Persistence and account-owned resources require authorization and ownership checks; guest generation endpoints require abuse controls but do not require authentication. AI endpoints must use server-side configuration, bounded inputs, timeouts, retry rules, provider error mapping, usage accounting, and audit records. Exact libraries, queueing, rate-limit store, and observability integration are `TBD`.
 
 ## Authentication and authorization
 
-Authentication is self-managed. The backend verifies credentials, issues short-lived access tokens and refresh tokens, validates bearer access tokens, and controls refresh-token rotation and revocation. Protected requests use the `Authorization: Bearer <access-token>` header. Passwords must never be stored or logged; they must be processed with an approved memory-hard password-hashing algorithm. The token format, claims, signing algorithm and key management, token lifetimes, refresh-token persistence, rotation policy, reuse detection, revocation behavior, account recovery, email verification, and roles are `TBD`.
+Authentication is self-managed. The backend verifies credentials, creates short-lived access tokens and refresh tokens, and validates self-contained bearer tokens without persisting raw tokens or token digests. Protected requests use the `Authorization: Bearer <access-token>` header. Passwords must never be stored or logged; they must be processed with an approved memory-hard password-hashing algorithm. The client stores the issued tokens and presents them to the backend as required. The token format, claims, signing algorithm and key management, token lifetimes, rotation policy, reuse detection, revocation behavior, account recovery, email verification, and roles are `TBD`.
 
 Authentication infrastructure must expose an application-level current-user contract rather than leaking NestJS request objects, HTTP headers, bearer-token libraries, MongoDB documents, or hashing-library types into domain use cases. A reusable ownership policy must compare the authenticated subject with the resource owner before reads, updates, deletes, resume operations, image/token access, or downloads. Missing, expired, invalid, or revoked identity and failed ownership checks must be handled consistently without resource-existence leakage.
 
 The authentication module must be composed at the backend boundary and must not gate guest story, image, token, or download generation. Protected save/resume use cases require authenticated identity and ownership checks. API routes and error-envelope details remain `TBD` until the API contract is approved.
 
-The Task 04 foundation uses opaque, cryptographically random bearer values: a short-lived access token for protected requests and a longer-lived refresh token for replacement access tokens. Only token digests are held by the session-store boundary; the raw values are returned to the caller and must never be logged. Refresh replaces the prior token pair, so a previously used refresh token is no longer valid. This is an implementation baseline, not a final decision about JWT versus another signed or opaque format; production lifetimes, storage, key management, reuse detection, and HTTP routes remain `TBD`.
+The token implementation uses self-contained JWTs signed with HS256 and is cryptographically verifiable because the backend does not maintain an access- or refresh-token store. The backend returns a short-lived access token and a longer-lived refresh token to the client; it validates each token using its protected signing configuration and standard JWT claims. The client owns token storage and must never expose signing material. Refresh replacement, reuse detection, revocation, production lifetimes, key management, and HTTP routes remain `TBD`; these cannot rely on a backend token store.
 
-NestJS interfaces do not exist at runtime, so constructor dependencies represented by interfaces must use explicit injection tokens. The auth module currently binds those tokens to in-memory account/session stores so the development application can start; these stores are temporary and non-persistent. They must be replaced by approved MongoDB persistence adapters before account data or refresh-token state is used beyond local development.
+NestJS interfaces do not exist at runtime, so constructor dependencies represented by interfaces must use explicit injection tokens. The auth module may use an account repository for user records, but it must not introduce a backend access-token or refresh-token store. Any in-memory token state is temporary development scaffolding and must not be used as part of production validation; production validation must rely on the self-contained token and protected signing/verification configuration.
 
 ### NestJS dependency-injection pattern
 
@@ -127,7 +133,7 @@ src/
 │   │   ├── adapters/
 │   │   │   └── http/
 │   │   └── infrastructure/
-│   │       └── persistence/
+│   │       └── repositories/
 │   └── health/
 │       ├── application/
 │       ├── adapters/

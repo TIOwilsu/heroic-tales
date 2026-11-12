@@ -4,7 +4,7 @@ Testing must be proportional to each task and must not call paid AI services in 
 
 ESLint is a required static-quality check for both frontend and backend TypeScript code. Linting must run independently from tests and type checking, must include the relevant configuration and test files, and must fail on the approved error-level rules. The exact ESLint configuration, plugin set, warning policy, and CI command remain `TBD` until the frontend and backend lint-configuration steps are executed.
 
-Required layers are unit tests for domain rules, integration tests for NestJS/MongoDB boundaries, API contract tests, frontend component/state tests, end-to-end wizard journeys when the UI exists, security/authorization tests, and deployment smoke tests.
+Required layers are unit tests for domain rules, integration tests for NestJS/MongoDB boundaries, API contract tests, frontend component/state tests, end-to-end wizard journeys when the UI exists, security/authorization tests, and deployment smoke tests. Authentication tests must verify that token creation and validation work without a backend access-token or refresh-token store and that no token or token digest is written to MongoDB.
 
 Minimum critical scenarios: autosave and resume, backward editing, accept/edit/reject AI flow, approved data protection, edition isolation, official/unverified labeling, image source revision, provider failure, unauthorized access, and safe secret configuration.
 
